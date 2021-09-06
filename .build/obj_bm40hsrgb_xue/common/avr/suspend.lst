@@ -1,0 +1,1239 @@
+   1               		.file	"suspend.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.suspend_idle,"ax",@progbits
+  11               	.global	suspend_idle
+  13               	suspend_idle:
+  14               	.LVL0:
+  15               	.LFB122:
+  16               		.file 1 "tmk_core/common/avr/suspend.c"
+   1:tmk_core/common/avr/suspend.c **** #include <stdbool.h>
+   2:tmk_core/common/avr/suspend.c **** #include <avr/sleep.h>
+   3:tmk_core/common/avr/suspend.c **** #include <avr/wdt.h>
+   4:tmk_core/common/avr/suspend.c **** #include <avr/interrupt.h>
+   5:tmk_core/common/avr/suspend.c **** #include "matrix.h"
+   6:tmk_core/common/avr/suspend.c **** #include "action.h"
+   7:tmk_core/common/avr/suspend.c **** #include "suspend.h"
+   8:tmk_core/common/avr/suspend.c **** #include "timer.h"
+   9:tmk_core/common/avr/suspend.c **** #include "led.h"
+  10:tmk_core/common/avr/suspend.c **** #include "host.h"
+  11:tmk_core/common/avr/suspend.c **** 
+  12:tmk_core/common/avr/suspend.c **** #ifdef PROTOCOL_LUFA
+  13:tmk_core/common/avr/suspend.c **** #    include "lufa.h"
+  14:tmk_core/common/avr/suspend.c **** #endif
+  15:tmk_core/common/avr/suspend.c **** #ifdef PROTOCOL_VUSB
+  16:tmk_core/common/avr/suspend.c **** #    include "vusb.h"
+  17:tmk_core/common/avr/suspend.c **** #endif
+  18:tmk_core/common/avr/suspend.c **** 
+  19:tmk_core/common/avr/suspend.c **** #ifdef BACKLIGHT_ENABLE
+  20:tmk_core/common/avr/suspend.c **** #    include "backlight.h"
+  21:tmk_core/common/avr/suspend.c **** #endif
+  22:tmk_core/common/avr/suspend.c **** 
+  23:tmk_core/common/avr/suspend.c **** #ifdef AUDIO_ENABLE
+  24:tmk_core/common/avr/suspend.c **** #    include "audio.h"
+  25:tmk_core/common/avr/suspend.c **** #endif /* AUDIO_ENABLE */
+  26:tmk_core/common/avr/suspend.c **** 
+  27:tmk_core/common/avr/suspend.c **** #if defined(RGBLIGHT_SLEEP) && defined(RGBLIGHT_ENABLE)
+  28:tmk_core/common/avr/suspend.c **** #    include "rgblight.h"
+  29:tmk_core/common/avr/suspend.c **** #endif
+  30:tmk_core/common/avr/suspend.c **** 
+  31:tmk_core/common/avr/suspend.c **** #ifdef LED_MATRIX_ENABLE
+  32:tmk_core/common/avr/suspend.c **** #    include "led_matrix.h"
+  33:tmk_core/common/avr/suspend.c **** #endif
+  34:tmk_core/common/avr/suspend.c **** #ifdef RGB_MATRIX_ENABLE
+  35:tmk_core/common/avr/suspend.c **** #    include "rgb_matrix.h"
+  36:tmk_core/common/avr/suspend.c **** #endif
+  37:tmk_core/common/avr/suspend.c **** 
+  38:tmk_core/common/avr/suspend.c **** /** \brief Suspend idle
+  39:tmk_core/common/avr/suspend.c ****  *
+  40:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+  41:tmk_core/common/avr/suspend.c ****  */
+  42:tmk_core/common/avr/suspend.c **** void suspend_idle(uint8_t time) {
+  17               		.loc 1 42 33 view -0
+  18               		.cfi_startproc
+  19               	/* prologue: function */
+  20               	/* frame size = 0 */
+  21               	/* stack size = 0 */
+  22               	.L__stack_usage = 0
+  43:tmk_core/common/avr/suspend.c ****     cli();
+  23               		.loc 1 43 5 view .LVU1
+  24               	/* #APP */
+  25               	 ;  43 "tmk_core/common/avr/suspend.c" 1
+  26 0000 F894      		cli
+  27               	 ;  0 "" 2
+  44:tmk_core/common/avr/suspend.c ****     set_sleep_mode(SLEEP_MODE_IDLE);
+  28               		.loc 1 44 5 view .LVU2
+  29               		.loc 1 44 5 view .LVU3
+  30               	/* #NOAPP */
+  31 0002 83B7      		in r24,0x33
+  32               	.LVL1:
+  33               		.loc 1 44 5 is_stmt 0 view .LVU4
+  34 0004 817F      		andi r24,lo8(-15)
+  35 0006 83BF      		out 0x33,r24
+  36               		.loc 1 44 5 is_stmt 1 view .LVU5
+  45:tmk_core/common/avr/suspend.c ****     sleep_enable();
+  37               		.loc 1 45 5 view .LVU6
+  38               		.loc 1 45 5 view .LVU7
+  39 0008 83B7      		in r24,0x33
+  40 000a 8160      		ori r24,lo8(1)
+  41 000c 83BF      		out 0x33,r24
+  42               		.loc 1 45 5 view .LVU8
+  46:tmk_core/common/avr/suspend.c ****     sei();
+  43               		.loc 1 46 5 view .LVU9
+  44               	/* #APP */
+  45               	 ;  46 "tmk_core/common/avr/suspend.c" 1
+  46 000e 7894      		sei
+  47               	 ;  0 "" 2
+  47:tmk_core/common/avr/suspend.c ****     sleep_cpu();
+  48               		.loc 1 47 5 view .LVU10
+  49               		.loc 1 47 5 view .LVU11
+  50               	 ;  47 "tmk_core/common/avr/suspend.c" 1
+  51 0010 8895      		sleep
+  52               		
+  53               	 ;  0 "" 2
+  54               		.loc 1 47 5 view .LVU12
+  48:tmk_core/common/avr/suspend.c ****     sleep_disable();
+  55               		.loc 1 48 5 view .LVU13
+  56               		.loc 1 48 5 view .LVU14
+  57               	/* #NOAPP */
+  58 0012 83B7      		in r24,0x33
+  59 0014 8E7F      		andi r24,lo8(-2)
+  60 0016 83BF      		out 0x33,r24
+  61               		.loc 1 48 5 view .LVU15
+  62               	/* epilogue start */
+  49:tmk_core/common/avr/suspend.c **** }
+  63               		.loc 1 49 1 is_stmt 0 view .LVU16
+  64 0018 0895      		ret
+  65               		.cfi_endproc
+  66               	.LFE122:
+  68               		.section	.text.matrix_power_up,"ax",@progbits
+  69               		.weak	matrix_power_up
+  71               	matrix_power_up:
+  72               	.LFB127:
+  50:tmk_core/common/avr/suspend.c **** 
+  51:tmk_core/common/avr/suspend.c **** // TODO: This needs some cleanup
+  52:tmk_core/common/avr/suspend.c **** 
+  53:tmk_core/common/avr/suspend.c **** /** \brief Run keyboard level Power down
+  54:tmk_core/common/avr/suspend.c ****  *
+  55:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+  56:tmk_core/common/avr/suspend.c ****  */
+  57:tmk_core/common/avr/suspend.c **** __attribute__((weak)) void suspend_power_down_user(void) {}
+  58:tmk_core/common/avr/suspend.c **** /** \brief Run keyboard level Power down
+  59:tmk_core/common/avr/suspend.c ****  *
+  60:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+  61:tmk_core/common/avr/suspend.c ****  */
+  62:tmk_core/common/avr/suspend.c **** __attribute__((weak)) void suspend_power_down_kb(void) { suspend_power_down_user(); }
+  63:tmk_core/common/avr/suspend.c **** 
+  64:tmk_core/common/avr/suspend.c **** #if !defined(NO_SUSPEND_POWER_DOWN) && defined(WDT_vect)
+  65:tmk_core/common/avr/suspend.c **** 
+  66:tmk_core/common/avr/suspend.c **** // clang-format off
+  67:tmk_core/common/avr/suspend.c **** #define wdt_intr_enable(value) \
+  68:tmk_core/common/avr/suspend.c **** __asm__ __volatile__ ( \
+  69:tmk_core/common/avr/suspend.c ****     "in __tmp_reg__,__SREG__" "\n\t" \
+  70:tmk_core/common/avr/suspend.c ****     "cli" "\n\t" \
+  71:tmk_core/common/avr/suspend.c ****     "wdr" "\n\t" \
+  72:tmk_core/common/avr/suspend.c ****     "sts %0,%1" "\n\t" \
+  73:tmk_core/common/avr/suspend.c ****     "out __SREG__,__tmp_reg__" "\n\t" \
+  74:tmk_core/common/avr/suspend.c ****     "sts %0,%2" "\n\t" \
+  75:tmk_core/common/avr/suspend.c ****     : /* no outputs */ \
+  76:tmk_core/common/avr/suspend.c ****     : "M" (_SFR_MEM_ADDR(_WD_CONTROL_REG)), \
+  77:tmk_core/common/avr/suspend.c ****     "r" (_BV(_WD_CHANGE_BIT) | _BV(WDE)), \
+  78:tmk_core/common/avr/suspend.c ****     "r" ((uint8_t) ((value & 0x08 ? _WD_PS3_MASK : 0x00) | _BV(WDIE) | (value & 0x07))) \
+  79:tmk_core/common/avr/suspend.c ****     : "r0" \
+  80:tmk_core/common/avr/suspend.c **** )
+  81:tmk_core/common/avr/suspend.c **** // clang-format on
+  82:tmk_core/common/avr/suspend.c **** 
+  83:tmk_core/common/avr/suspend.c **** /** \brief Power down MCU with watchdog timer
+  84:tmk_core/common/avr/suspend.c ****  *
+  85:tmk_core/common/avr/suspend.c ****  * wdto: watchdog timer timeout defined in <avr/wdt.h>
+  86:tmk_core/common/avr/suspend.c ****  *          WDTO_15MS
+  87:tmk_core/common/avr/suspend.c ****  *          WDTO_30MS
+  88:tmk_core/common/avr/suspend.c ****  *          WDTO_60MS
+  89:tmk_core/common/avr/suspend.c ****  *          WDTO_120MS
+  90:tmk_core/common/avr/suspend.c ****  *          WDTO_250MS
+  91:tmk_core/common/avr/suspend.c ****  *          WDTO_500MS
+  92:tmk_core/common/avr/suspend.c ****  *          WDTO_1S
+  93:tmk_core/common/avr/suspend.c ****  *          WDTO_2S
+  94:tmk_core/common/avr/suspend.c ****  *          WDTO_4S
+  95:tmk_core/common/avr/suspend.c ****  *          WDTO_8S
+  96:tmk_core/common/avr/suspend.c ****  */
+  97:tmk_core/common/avr/suspend.c **** static uint8_t wdt_timeout = 0;
+  98:tmk_core/common/avr/suspend.c **** 
+  99:tmk_core/common/avr/suspend.c **** /** \brief Power down
+ 100:tmk_core/common/avr/suspend.c ****  *
+ 101:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+ 102:tmk_core/common/avr/suspend.c ****  */
+ 103:tmk_core/common/avr/suspend.c **** static void power_down(uint8_t wdto) {
+ 104:tmk_core/common/avr/suspend.c ****     wdt_timeout = wdto;
+ 105:tmk_core/common/avr/suspend.c **** 
+ 106:tmk_core/common/avr/suspend.c ****     // Watchdog Interrupt Mode
+ 107:tmk_core/common/avr/suspend.c ****     wdt_intr_enable(wdto);
+ 108:tmk_core/common/avr/suspend.c **** 
+ 109:tmk_core/common/avr/suspend.c ****     // TODO: more power saving
+ 110:tmk_core/common/avr/suspend.c ****     // See PicoPower application note
+ 111:tmk_core/common/avr/suspend.c ****     // - I/O port input with pullup
+ 112:tmk_core/common/avr/suspend.c ****     // - prescale clock
+ 113:tmk_core/common/avr/suspend.c ****     // - BOD disable
+ 114:tmk_core/common/avr/suspend.c ****     // - Power Reduction Register PRR
+ 115:tmk_core/common/avr/suspend.c ****     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+ 116:tmk_core/common/avr/suspend.c ****     sleep_enable();
+ 117:tmk_core/common/avr/suspend.c ****     sei();
+ 118:tmk_core/common/avr/suspend.c ****     sleep_cpu();
+ 119:tmk_core/common/avr/suspend.c ****     sleep_disable();
+ 120:tmk_core/common/avr/suspend.c **** 
+ 121:tmk_core/common/avr/suspend.c ****     // Disable watchdog after sleep
+ 122:tmk_core/common/avr/suspend.c ****     wdt_disable();
+ 123:tmk_core/common/avr/suspend.c **** }
+ 124:tmk_core/common/avr/suspend.c **** #endif
+ 125:tmk_core/common/avr/suspend.c **** 
+ 126:tmk_core/common/avr/suspend.c **** /** \brief Suspend power down
+ 127:tmk_core/common/avr/suspend.c ****  *
+ 128:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+ 129:tmk_core/common/avr/suspend.c ****  */
+ 130:tmk_core/common/avr/suspend.c **** void suspend_power_down(void) {
+ 131:tmk_core/common/avr/suspend.c **** #ifdef PROTOCOL_LUFA
+ 132:tmk_core/common/avr/suspend.c ****     if (USB_DeviceState == DEVICE_STATE_Configured) return;
+ 133:tmk_core/common/avr/suspend.c **** #endif
+ 134:tmk_core/common/avr/suspend.c **** #ifdef PROTOCOL_VUSB
+ 135:tmk_core/common/avr/suspend.c ****     if (!vusb_suspended) return;
+ 136:tmk_core/common/avr/suspend.c **** #endif
+ 137:tmk_core/common/avr/suspend.c **** 
+ 138:tmk_core/common/avr/suspend.c ****     suspend_power_down_kb();
+ 139:tmk_core/common/avr/suspend.c **** 
+ 140:tmk_core/common/avr/suspend.c **** #ifndef NO_SUSPEND_POWER_DOWN
+ 141:tmk_core/common/avr/suspend.c ****     // Turn off backlight
+ 142:tmk_core/common/avr/suspend.c **** #    ifdef BACKLIGHT_ENABLE
+ 143:tmk_core/common/avr/suspend.c ****     backlight_set(0);
+ 144:tmk_core/common/avr/suspend.c **** #    endif
+ 145:tmk_core/common/avr/suspend.c **** 
+ 146:tmk_core/common/avr/suspend.c ****     // Turn off LED indicators
+ 147:tmk_core/common/avr/suspend.c ****     uint8_t leds_off = 0;
+ 148:tmk_core/common/avr/suspend.c **** #    if defined(BACKLIGHT_CAPS_LOCK) && defined(BACKLIGHT_ENABLE)
+ 149:tmk_core/common/avr/suspend.c ****     if (is_backlight_enabled()) {
+ 150:tmk_core/common/avr/suspend.c ****         // Don't try to turn off Caps Lock indicator as it is backlight and backlight is already of
+ 151:tmk_core/common/avr/suspend.c ****         leds_off |= (1 << USB_LED_CAPS_LOCK);
+ 152:tmk_core/common/avr/suspend.c ****     }
+ 153:tmk_core/common/avr/suspend.c **** #    endif
+ 154:tmk_core/common/avr/suspend.c ****     led_set(leds_off);
+ 155:tmk_core/common/avr/suspend.c **** 
+ 156:tmk_core/common/avr/suspend.c ****     // Turn off audio
+ 157:tmk_core/common/avr/suspend.c **** #    ifdef AUDIO_ENABLE
+ 158:tmk_core/common/avr/suspend.c ****     stop_all_notes();
+ 159:tmk_core/common/avr/suspend.c **** #    endif
+ 160:tmk_core/common/avr/suspend.c **** 
+ 161:tmk_core/common/avr/suspend.c ****     // Turn off underglow
+ 162:tmk_core/common/avr/suspend.c **** #    if defined(RGBLIGHT_SLEEP) && defined(RGBLIGHT_ENABLE)
+ 163:tmk_core/common/avr/suspend.c ****     rgblight_suspend();
+ 164:tmk_core/common/avr/suspend.c **** #    endif
+ 165:tmk_core/common/avr/suspend.c **** 
+ 166:tmk_core/common/avr/suspend.c **** #    if defined(LED_MATRIX_ENABLE)
+ 167:tmk_core/common/avr/suspend.c ****     led_matrix_set_suspend_state(true);
+ 168:tmk_core/common/avr/suspend.c **** #    endif
+ 169:tmk_core/common/avr/suspend.c **** #    if defined(RGB_MATRIX_ENABLE)
+ 170:tmk_core/common/avr/suspend.c ****     rgb_matrix_set_suspend_state(true);
+ 171:tmk_core/common/avr/suspend.c **** #    endif
+ 172:tmk_core/common/avr/suspend.c **** 
+ 173:tmk_core/common/avr/suspend.c ****     // Enter sleep state if possible (ie, the MCU has a watchdog timeout interrupt)
+ 174:tmk_core/common/avr/suspend.c **** #    if defined(WDT_vect)
+ 175:tmk_core/common/avr/suspend.c ****     power_down(WDTO_15MS);
+ 176:tmk_core/common/avr/suspend.c **** #    endif
+ 177:tmk_core/common/avr/suspend.c **** #endif
+ 178:tmk_core/common/avr/suspend.c **** }
+ 179:tmk_core/common/avr/suspend.c **** 
+ 180:tmk_core/common/avr/suspend.c **** __attribute__((weak)) void matrix_power_up(void) {}
+  73               		.loc 1 180 50 is_stmt 1 view -0
+  74               		.cfi_startproc
+  75               	/* prologue: function */
+  76               	/* frame size = 0 */
+  77               	/* stack size = 0 */
+  78               	.L__stack_usage = 0
+  79               		.loc 1 180 51 view .LVU18
+  80               	/* epilogue start */
+  81               		.loc 1 180 1 is_stmt 0 view .LVU19
+  82 0000 0895      		ret
+  83               		.cfi_endproc
+  84               	.LFE127:
+  86               		.set	matrix_power_up.localalias.0,matrix_power_up
+  87               		.section	.text.suspend_power_down_user,"ax",@progbits
+  88               		.weak	suspend_power_down_user
+  90               	suspend_power_down_user:
+  91               	.LFB139:
+  92               		.cfi_startproc
+  93               	/* prologue: function */
+  94               	/* frame size = 0 */
+  95               	/* stack size = 0 */
+  96               	.L__stack_usage = 0
+  97               	/* epilogue start */
+  98 0000 0895      		ret
+  99               		.cfi_endproc
+ 100               	.LFE139:
+ 102               		.section	.text.suspend_power_down_kb,"ax",@progbits
+ 103               		.weak	suspend_power_down_kb
+ 105               	suspend_power_down_kb:
+ 106               	.LFB124:
+  62:tmk_core/common/avr/suspend.c **** 
+ 107               		.loc 1 62 56 is_stmt 1 view -0
+ 108               		.cfi_startproc
+ 109               	/* prologue: function */
+ 110               	/* frame size = 0 */
+ 111               	/* stack size = 0 */
+ 112               	.L__stack_usage = 0
+  62:tmk_core/common/avr/suspend.c **** 
+ 113               		.loc 1 62 58 view .LVU21
+ 114 0000 0C94 0000 		jmp suspend_power_down_user
+ 115               	.LVL2:
+ 116               		.cfi_endproc
+ 117               	.LFE124:
+ 119               		.section	.text.suspend_power_down,"ax",@progbits
+ 120               	.global	suspend_power_down
+ 122               	suspend_power_down:
+ 123               	.LFB126:
+ 130:tmk_core/common/avr/suspend.c **** #ifdef PROTOCOL_LUFA
+ 124               		.loc 1 130 31 view -0
+ 125               		.cfi_startproc
+ 126               	/* prologue: function */
+ 127               	/* frame size = 0 */
+ 128               	/* stack size = 0 */
+ 129               	.L__stack_usage = 0
+ 132:tmk_core/common/avr/suspend.c **** #endif
+ 130               		.loc 1 132 5 view .LVU23
+ 132:tmk_core/common/avr/suspend.c **** #endif
+ 131               		.loc 1 132 25 is_stmt 0 view .LVU24
+ 132 0000 8091 0000 		lds r24,USB_DeviceState
+ 132:tmk_core/common/avr/suspend.c **** #endif
+ 133               		.loc 1 132 8 view .LVU25
+ 134 0004 8430      		cpi r24,lo8(4)
+ 135 0006 01F0      		breq .L5
+ 138:tmk_core/common/avr/suspend.c **** 
+ 136               		.loc 1 138 5 is_stmt 1 view .LVU26
+ 137 0008 0E94 0000 		call suspend_power_down_kb
+ 138               	.LVL3:
+ 147:tmk_core/common/avr/suspend.c **** #    if defined(BACKLIGHT_CAPS_LOCK) && defined(BACKLIGHT_ENABLE)
+ 139               		.loc 1 147 5 view .LVU27
+ 154:tmk_core/common/avr/suspend.c **** 
+ 140               		.loc 1 154 5 view .LVU28
+ 141 000c 80E0      		ldi r24,0
+ 142 000e 0E94 0000 		call led_set
+ 143               	.LVL4:
+ 170:tmk_core/common/avr/suspend.c **** #    endif
+ 144               		.loc 1 170 5 view .LVU29
+ 145 0012 81E0      		ldi r24,lo8(1)
+ 146 0014 0E94 0000 		call rgb_matrix_set_suspend_state
+ 147               	.LVL5:
+ 175:tmk_core/common/avr/suspend.c **** #    endif
+ 148               		.loc 1 175 5 view .LVU30
+ 149               	.LBB11:
+ 150               	.LBI11:
+ 103:tmk_core/common/avr/suspend.c ****     wdt_timeout = wdto;
+ 151               		.loc 1 103 13 view .LVU31
+ 152               	.LBB12:
+ 104:tmk_core/common/avr/suspend.c **** 
+ 153               		.loc 1 104 5 view .LVU32
+ 104:tmk_core/common/avr/suspend.c **** 
+ 154               		.loc 1 104 17 is_stmt 0 view .LVU33
+ 155 0018 1092 0000 		sts wdt_timeout,__zero_reg__
+ 107:tmk_core/common/avr/suspend.c **** 
+ 156               		.loc 1 107 5 is_stmt 1 view .LVU34
+ 157 001c 88E1      		ldi r24,lo8(24)
+ 158 001e 90E0      		ldi r25,0
+ 159 0020 20E4      		ldi r18,lo8(64)
+ 160               	/* #APP */
+ 161               	 ;  107 "tmk_core/common/avr/suspend.c" 1
+ 162 0022 0FB6      		in __tmp_reg__,__SREG__
+ 163 0024 F894      		cli
+ 164 0026 A895      		wdr
+ 165 0028 8093 6000 		sts 96,r24
+ 166 002c 0FBE      		out __SREG__,__tmp_reg__
+ 167 002e 2093 6000 		sts 96,r18
+ 168               		
+ 169               	 ;  0 "" 2
+ 115:tmk_core/common/avr/suspend.c ****     sleep_enable();
+ 170               		.loc 1 115 5 view .LVU35
+ 115:tmk_core/common/avr/suspend.c ****     sleep_enable();
+ 171               		.loc 1 115 5 view .LVU36
+ 172               	/* #NOAPP */
+ 173 0032 83B7      		in r24,0x33
+ 174 0034 817F      		andi r24,lo8(-15)
+ 175 0036 8460      		ori r24,lo8(4)
+ 176 0038 83BF      		out 0x33,r24
+ 115:tmk_core/common/avr/suspend.c ****     sleep_enable();
+ 177               		.loc 1 115 5 view .LVU37
+ 116:tmk_core/common/avr/suspend.c ****     sei();
+ 178               		.loc 1 116 5 view .LVU38
+ 116:tmk_core/common/avr/suspend.c ****     sei();
+ 179               		.loc 1 116 5 view .LVU39
+ 180 003a 83B7      		in r24,0x33
+ 181 003c 8160      		ori r24,lo8(1)
+ 182 003e 83BF      		out 0x33,r24
+ 116:tmk_core/common/avr/suspend.c ****     sei();
+ 183               		.loc 1 116 5 view .LVU40
+ 117:tmk_core/common/avr/suspend.c ****     sleep_cpu();
+ 184               		.loc 1 117 5 view .LVU41
+ 185               	/* #APP */
+ 186               	 ;  117 "tmk_core/common/avr/suspend.c" 1
+ 187 0040 7894      		sei
+ 188               	 ;  0 "" 2
+ 118:tmk_core/common/avr/suspend.c ****     sleep_disable();
+ 189               		.loc 1 118 5 view .LVU42
+ 118:tmk_core/common/avr/suspend.c ****     sleep_disable();
+ 190               		.loc 1 118 5 view .LVU43
+ 191               	 ;  118 "tmk_core/common/avr/suspend.c" 1
+ 192 0042 8895      		sleep
+ 193               		
+ 194               	 ;  0 "" 2
+ 118:tmk_core/common/avr/suspend.c ****     sleep_disable();
+ 195               		.loc 1 118 5 view .LVU44
+ 119:tmk_core/common/avr/suspend.c **** 
+ 196               		.loc 1 119 5 view .LVU45
+ 119:tmk_core/common/avr/suspend.c **** 
+ 197               		.loc 1 119 5 view .LVU46
+ 198               	/* #NOAPP */
+ 199 0044 83B7      		in r24,0x33
+ 200 0046 8E7F      		andi r24,lo8(-2)
+ 201 0048 83BF      		out 0x33,r24
+ 119:tmk_core/common/avr/suspend.c **** 
+ 202               		.loc 1 119 5 view .LVU47
+ 122:tmk_core/common/avr/suspend.c **** }
+ 203               		.loc 1 122 5 view .LVU48
+ 204               	.LBB13:
+ 205               	.LBI13:
+ 206               		.file 2 "c:\\qmk_msys\\mingw64\\avr\\include\\avr\\wdt.h"
+   1:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /* Copyright (c) 2002, 2004 Marek Michalkiewicz
+   2:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    Copyright (c) 2005, 2006, 2007 Eric B. Weddington
+   3:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    All rights reserved.
+   4:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+   5:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    Redistribution and use in source and binary forms, with or without
+   6:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    modification, are permitted provided that the following conditions are met:
+   7:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+   8:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    * Redistributions of source code must retain the above copyright
+   9:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****      notice, this list of conditions and the following disclaimer.
+  10:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  11:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    * Redistributions in binary form must reproduce the above copyright
+  12:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****      notice, this list of conditions and the following disclaimer in
+  13:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****      the documentation and/or other materials provided with the
+  14:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****      distribution.
+  15:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  16:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    * Neither the name of the copyright holders nor the names of
+  17:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****      contributors may be used to endorse or promote products derived
+  18:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****      from this software without specific prior written permission.
+  19:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  20:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  31:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  32:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /* $Id: wdt.h 2503 2016-02-07 22:59:47Z joerg_wunsch $ */
+  33:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  34:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /*
+  35:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    avr/wdt.h - macros for AVR watchdog timer
+  36:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****  */
+  37:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  38:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #ifndef _AVR_WDT_H_
+  39:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define _AVR_WDT_H_
+  40:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  41:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #include <avr/io.h>
+  42:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #include <stdint.h>
+  43:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  44:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /** \file */
+  45:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /** \defgroup avr_watchdog <avr/wdt.h>: Watchdog timer handling
+  46:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     \code #include <avr/wdt.h> \endcode
+  47:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  48:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     This header file declares the interface to some inline macros
+  49:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     handling the watchdog timer present in many AVR devices.  In order
+  50:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     to prevent the watchdog timer configuration from being
+  51:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     accidentally altered by a crashing application, a special timed
+  52:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     sequence is required in order to change it.  The macros within
+  53:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     this header file handle the required sequence automatically
+  54:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     before changing any value.  Interrupts will be disabled during
+  55:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     the manipulation.
+  56:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  57:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     \note Depending on the fuse configuration of the particular
+  58:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     device, further restrictions might apply, in particular it might
+  59:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     be disallowed to turn off the watchdog timer.
+  60:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  61:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     Note that for newer devices (ATmega88 and newer, effectively any
+  62:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     AVR that has the option to also generate interrupts), the watchdog
+  63:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     timer remains active even after a system reset (except a power-on
+  64:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     condition), using the fastest prescaler value (approximately 15
+  65:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     ms).  It is therefore required to turn off the watchdog early
+  66:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     during program startup, the datasheet recommends a sequence like
+  67:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     the following:
+  68:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  69:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     \code
+  70:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     #include <stdint.h>
+  71:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     #include <avr/wdt.h>
+  72:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  73:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     uint8_t mcusr_mirror __attribute__ ((section (".noinit")));
+  74:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  75:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     void get_mcusr(void) \
+  76:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       __attribute__((naked)) \
+  77:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       __attribute__((section(".init3")));
+  78:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     void get_mcusr(void)
+  79:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     {
+  80:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       mcusr_mirror = MCUSR;
+  81:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       MCUSR = 0;
+  82:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       wdt_disable();
+  83:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     }
+  84:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     \endcode
+  85:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  86:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     Saving the value of MCUSR in \c mcusr_mirror is only needed if the
+  87:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     application later wants to examine the reset source, but in particular, 
+  88:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     clearing the watchdog reset flag before disabling the
+  89:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     watchdog is required, according to the datasheet.
+  90:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** */
+  91:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  92:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /**
+  93:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    \ingroup avr_watchdog
+  94:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    Reset the watchdog timer.  When the watchdog timer is enabled,
+  95:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    a call to this instruction is required before the timer expires,
+  96:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    otherwise a watchdog-initiated device reset will occur. 
+  97:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** */
+  98:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+  99:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define wdt_reset() __asm__ __volatile__ ("wdr")
+ 100:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 101:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #ifndef __DOXYGEN__
+ 102:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 103:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #if defined(WDP3)
+ 104:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** # define _WD_PS3_MASK       _BV(WDP3)
+ 105:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #else
+ 106:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** # define _WD_PS3_MASK       0x00
+ 107:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #endif
+ 108:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 109:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #if defined(WDTCSR)
+ 110:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #  define _WD_CONTROL_REG     WDTCSR
+ 111:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #elif defined(WDTCR)
+ 112:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #  define _WD_CONTROL_REG     WDTCR
+ 113:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #else
+ 114:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #  define _WD_CONTROL_REG     WDT
+ 115:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #endif
+ 116:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 117:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #if defined(WDTOE)
+ 118:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define _WD_CHANGE_BIT      WDTOE
+ 119:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #else
+ 120:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define _WD_CHANGE_BIT      WDCE
+ 121:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #endif
+ 122:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 123:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #endif	/* !__DOXYGEN__ */
+ 124:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 125:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 126:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /**
+ 127:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    \ingroup avr_watchdog
+ 128:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    Enable the watchdog timer, configuring it for expiry after
+ 129:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    \c timeout (which is a combination of the \c WDP0 through
+ 130:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    \c WDP2 bits to write into the \c WDTCR register; For those devices 
+ 131:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    that have a \c WDTCSR register, it uses the combination of the \c WDP0 
+ 132:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    through \c WDP3 bits).
+ 133:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 134:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    See also the symbolic constants \c WDTO_15MS et al.
+ 135:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** */
+ 136:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 137:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 138:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #if defined(__AVR_XMEGA__)
+ 139:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 140:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** /*
+ 141:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    wdt_enable(timeout) for xmega devices
+ 142:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** ** write signature (CCP_IOREG_gc) that enables change of protected I/O
+ 143:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    registers to the CCP register
+ 144:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** ** At the same time,
+ 145:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    1) set WDT change enable (WDT_CEN_bm)
+ 146:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    2) enable WDT (WDT_ENABLE_bm)
+ 147:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    3) set timeout (timeout)
+ 148:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** ** Synchronization starts when ENABLE bit of WDT is set. So, wait till it
+ 149:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    finishes (SYNCBUSY of STATUS register is automatically cleared after the
+ 150:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****    sync is finished).
+ 151:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** */
+ 152:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define wdt_enable(timeout) \
+ 153:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** do { \
+ 154:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** uint8_t temp; \
+ 155:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __asm__ __volatile__ (         \
+ 156:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "in __tmp_reg__, %[rampd]"              "\n\t" \
+ 157:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[rampd], __zero_reg__"            "\n\t" \
+ 158:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[ccp_reg], %[ioreg_cen_mask]"     "\n\t" \
+ 159:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "sts %[wdt_reg], %[wdt_enable_timeout]" "\n\t" \
+ 160:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "1:lds %[tmp], %[wdt_status_reg]"       "\n\t" \
+ 161:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "sbrc %[tmp], %[wdt_syncbusy_bit]"      "\n\t" \
+ 162:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "rjmp 1b"                               "\n\t" \
+ 163:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[rampd], __tmp_reg__"             "\n\t" \
+ 164:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : [tmp]                "=r" (temp) \
+ 165:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : [rampd]              "I" (_SFR_IO_ADDR(RAMPD)),      \
+ 166:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [ccp_reg]            "I" (_SFR_IO_ADDR(CCP)),        \
+ 167:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [ioreg_cen_mask]     "r" ((uint8_t)CCP_IOREG_gc),     \
+ 168:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [wdt_reg]            "n" (_SFR_MEM_ADDR(WDT_CTRL)),   \
+ 169:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [wdt_enable_timeout] "r" ((uint8_t)(WDT_CEN_bm | WDT_ENABLE_bm | timeout)), \
+ 170:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [wdt_status_reg]     "n" (_SFR_MEM_ADDR(WDT_STATUS)), \
+ 171:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [wdt_syncbusy_bit]   "I" (WDT_SYNCBUSY_bm)            \
+ 172:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : "r0" \
+ 173:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** ); \
+ 174:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** } while(0)
+ 175:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 176:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define wdt_disable() \
+ 177:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __asm__ __volatile__ (  \
+ 178:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "in __tmp_reg__, %[rampd]"          "\n\t" \
+ 179:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[rampd], __zero_reg__"        "\n\t" \
+ 180:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[ccp_reg], %[ioreg_cen_mask]" "\n\t" \
+ 181:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "sts %[wdt_reg], %[disable_mask]"   "\n\t" \
+ 182:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[rampd], __tmp_reg__"         "\n\t" \
+ 183:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : \
+ 184:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : [rampd]             "I" (_SFR_IO_ADDR(RAMPD)),    \
+ 185:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [ccp_reg]           "I" (_SFR_IO_ADDR(CCP)),      \
+ 186:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [ioreg_cen_mask]    "r" ((uint8_t)CCP_IOREG_gc),   \
+ 187:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [wdt_reg]           "n" (_SFR_MEM_ADDR(WDT_CTRL)), \
+ 188:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [disable_mask]      "r" ((uint8_t)((~WDT_ENABLE_bm) | WDT_CEN_bm)) \
+ 189:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : "r0" \
+ 190:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** );
+ 191:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 192:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #elif defined(__AVR_TINY__)
+ 193:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 194:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define wdt_enable(value) \
+ 195:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __asm__ __volatile__ ( \
+ 196:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "in __tmp_reg__,__SREG__" "\n\t"  \
+ 197:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "cli" "\n\t"  \
+ 198:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "wdr" "\n\t"  \
+ 199:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[CCPADDRESS],%[SIGNATURE]" "\n\t"  \
+ 200:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[WDTREG],%[WDVALUE]" "\n\t"  \
+ 201:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out __SREG__,__tmp_reg__" "\n\t"  \
+ 202:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : /* no outputs */  \
+ 203:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : [CCPADDRESS] "I" (_SFR_IO_ADDR(CCP)),  \
+ 204:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [SIGNATURE] "r" ((uint8_t)0xD8), \
+ 205:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [WDTREG] "I" (_SFR_IO_ADDR(_WD_CONTROL_REG)), \
+ 206:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [WDVALUE] "r" ((uint8_t)((value & 0x08 ? _WD_PS3_MASK : 0x00) \
+ 207:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       | _BV(WDE) | (value & 0x07) )) \
+ 208:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : "r16" \
+ 209:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** )
+ 210:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 211:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #define wdt_disable() \
+ 212:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** do { \
+ 213:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** uint8_t temp_wd; \
+ 214:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __asm__ __volatile__ ( \
+ 215:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "in __tmp_reg__,__SREG__" "\n\t"  \
+ 216:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "cli" "\n\t"  \
+ 217:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "wdr" "\n\t"  \
+ 218:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[CCPADDRESS],%[SIGNATURE]" "\n\t"  \
+ 219:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "in  %[TEMP_WD],%[WDTREG]" "\n\t" \
+ 220:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "cbr %[TEMP_WD],%[WDVALUE]" "\n\t" \
+ 221:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out %[WDTREG],%[TEMP_WD]" "\n\t" \
+ 222:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     "out __SREG__,__tmp_reg__" "\n\t" \
+ 223:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : /*no output */ \
+ 224:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : [CCPADDRESS] "I" (_SFR_IO_ADDR(CCP)), \
+ 225:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [SIGNATURE] "r" ((uint8_t)0xD8), \
+ 226:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [WDTREG] "I" (_SFR_IO_ADDR(_WD_CONTROL_REG)), \
+ 227:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [TEMP_WD] "d" (temp_wd), \
+ 228:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****       [WDVALUE] "n" (1 << WDE) \
+ 229:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****     : "r16" \
+ 230:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** ); \
+ 231:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** }while(0)
+ 232:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 233:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #elif defined(CCP)
+ 234:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 235:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** static __inline__
+ 236:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __attribute__ ((__always_inline__))
+ 237:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** void wdt_enable (const uint8_t value)
+ 238:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** {
+ 239:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	if (!_SFR_IO_REG_P (CCP) && !_SFR_IO_REG_P (_WD_CONTROL_REG))
+ 240:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 241:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 242:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"in __tmp_reg__,__SREG__" "\n\t"
+ 243:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"cli" "\n\t"
+ 244:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"wdr" "\n\t"
+ 245:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"sts %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 246:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"sts %[WDTREG],%[WDVALUE]" "\n\t"
+ 247:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out __SREG__,__tmp_reg__" "\n\t"
+ 248:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: /* no outputs */
+ 249:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: [CCPADDRESS] "n" (_SFR_MEM_ADDR(CCP)),
+ 250:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[SIGNATURE] "r" ((uint8_t)0xD8),
+ 251:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDTREG] "n" (_SFR_MEM_ADDR(_WD_CONTROL_REG)),
+ 252:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDVALUE] "r" ((uint8_t)((value & 0x08 ? _WD_PS3_MASK : 0x00)
+ 253:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				| _BV(WDE) | (value & 0x07) ))
+ 254:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: "r0"
+ 255:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			);
+ 256:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 257:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else if (!_SFR_IO_REG_P (CCP) && _SFR_IO_REG_P (_WD_CONTROL_REG))
+ 258:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 259:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 260:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"in __tmp_reg__,__SREG__" "\n\t"
+ 261:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"cli" "\n\t"
+ 262:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"wdr" "\n\t"
+ 263:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"sts %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 264:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out %[WDTREG],%[WDVALUE]" "\n\t"
+ 265:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out __SREG__,__tmp_reg__" "\n\t"
+ 266:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: /* no outputs */
+ 267:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: [CCPADDRESS] "n" (_SFR_MEM_ADDR(CCP)),
+ 268:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[SIGNATURE] "r" ((uint8_t)0xD8),
+ 269:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDTREG] "I" (_SFR_IO_ADDR(_WD_CONTROL_REG)),
+ 270:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDVALUE] "r" ((uint8_t)((value & 0x08 ? _WD_PS3_MASK : 0x00)
+ 271:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				| _BV(WDE) | (value & 0x07) ))
+ 272:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: "r0"
+ 273:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			);
+ 274:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 275:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else if (_SFR_IO_REG_P (CCP) && !_SFR_IO_REG_P (_WD_CONTROL_REG))
+ 276:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 277:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 278:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"in __tmp_reg__,__SREG__" "\n\t"
+ 279:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"cli" "\n\t"
+ 280:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"wdr" "\n\t"
+ 281:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 282:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"sts %[WDTREG],%[WDVALUE]" "\n\t"
+ 283:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out __SREG__,__tmp_reg__" "\n\t"
+ 284:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: /* no outputs */
+ 285:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: [CCPADDRESS] "I" (_SFR_IO_ADDR(CCP)),
+ 286:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[SIGNATURE] "r" ((uint8_t)0xD8),
+ 287:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDTREG] "n" (_SFR_MEM_ADDR(_WD_CONTROL_REG)),
+ 288:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDVALUE] "r" ((uint8_t)((value & 0x08 ? _WD_PS3_MASK : 0x00)
+ 289:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				| _BV(WDE) | (value & 0x07) ))
+ 290:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: "r0"
+ 291:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			);
+ 292:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 293:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else
+ 294:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****  	{
+ 295:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 296:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"in __tmp_reg__,__SREG__" "\n\t"
+ 297:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"cli" "\n\t"
+ 298:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"wdr" "\n\t"
+ 299:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 300:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out %[WDTREG],%[WDVALUE]" "\n\t"
+ 301:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			"out __SREG__,__tmp_reg__" "\n\t"
+ 302:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: /* no outputs */
+ 303:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: [CCPADDRESS] "I" (_SFR_IO_ADDR(CCP)),
+ 304:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[SIGNATURE] "r" ((uint8_t)0xD8),
+ 305:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDTREG] "I" (_SFR_IO_ADDR(_WD_CONTROL_REG)),
+ 306:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			[WDVALUE] "r" ((uint8_t)((value & 0x08 ? _WD_PS3_MASK : 0x00)
+ 307:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				| _BV(WDE) | (value & 0x07) ))
+ 308:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			: "r0"
+ 309:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 			);
+ 310:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 311:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** }
+ 312:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 313:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** static __inline__
+ 314:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __attribute__ ((__always_inline__))
+ 315:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** void wdt_disable (void)
+ 316:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** {
+ 317:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	if (!_SFR_IO_REG_P (CCP) && !_SFR_IO_REG_P(_WD_CONTROL_REG))
+ 318:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 319:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         uint8_t temp_wd;
+ 320:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         __asm__ __volatile__ (
+ 321:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in __tmp_reg__,__SREG__" "\n\t"
+ 322:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cli" "\n\t"
+ 323:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"wdr" "\n\t"
+ 324:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"sts %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 325:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"lds %[TEMP_WD],%[WDTREG]" "\n\t"
+ 326:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cbr %[TEMP_WD],%[WDVALUE]" "\n\t"
+ 327:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"sts %[WDTREG],%[TEMP_WD]" "\n\t"
+ 328:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out __SREG__,__tmp_reg__" "\n\t"
+ 329:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: /*no output */
+ 330:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: [CCPADDRESS] "n" (_SFR_MEM_ADDR(CCP)),
+ 331:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[SIGNATURE] "r" ((uint8_t)0xD8),
+ 332:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDTREG] "n" (_SFR_MEM_ADDR(_WD_CONTROL_REG)),
+ 333:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[TEMP_WD] "d" (temp_wd),
+ 334:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDVALUE] "n" (1 << WDE)
+ 335:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "r0"
+ 336:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				);
+ 337:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 338:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else if (!_SFR_IO_REG_P (CCP) && _SFR_IO_REG_P(_WD_CONTROL_REG))
+ 339:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 340:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         uint8_t temp_wd;
+ 341:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         __asm__ __volatile__ (
+ 342:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in __tmp_reg__,__SREG__" "\n\t"
+ 343:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cli" "\n\t"
+ 344:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"wdr" "\n\t"
+ 345:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"sts %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 346:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in %[TEMP_WD],%[WDTREG]" "\n\t"
+ 347:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cbr %[TEMP_WD],%[WDVALUE]" "\n\t"
+ 348:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %[WDTREG],%[TEMP_WD]" "\n\t"
+ 349:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out __SREG__,__tmp_reg__" "\n\t"
+ 350:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: /*no output */
+ 351:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: [CCPADDRESS] "n" (_SFR_MEM_ADDR(CCP)),
+ 352:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[SIGNATURE] "r" ((uint8_t)0xD8),
+ 353:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDTREG] "I" (_SFR_IO_ADDR(_WD_CONTROL_REG)),
+ 354:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[TEMP_WD] "d" (temp_wd),
+ 355:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDVALUE] "n" (1 << WDE)
+ 356:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "r0"
+ 357:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				);
+ 358:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 359:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else if (_SFR_IO_REG_P (CCP) && !_SFR_IO_REG_P(_WD_CONTROL_REG))
+ 360:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 361:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         uint8_t temp_wd;
+ 362:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         __asm__ __volatile__ (
+ 363:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in __tmp_reg__,__SREG__" "\n\t"
+ 364:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cli" "\n\t"
+ 365:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"wdr" "\n\t"
+ 366:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 367:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"lds %[TEMP_WD],%[WDTREG]" "\n\t"
+ 368:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cbr %[TEMP_WD],%[WDVALUE]" "\n\t"
+ 369:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"sts %[WDTREG],%[TEMP_WD]" "\n\t"
+ 370:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out __SREG__,__tmp_reg__" "\n\t"
+ 371:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: /*no output */
+ 372:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: [CCPADDRESS] "I" (_SFR_IO_ADDR(CCP)),
+ 373:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[SIGNATURE] "r" ((uint8_t)0xD8),
+ 374:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDTREG] "n" (_SFR_MEM_ADDR(_WD_CONTROL_REG)),
+ 375:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[TEMP_WD] "d" (temp_wd),
+ 376:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDVALUE] "n" (1 << WDE)
+ 377:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "r0"
+ 378:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				);
+ 379:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 380:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else
+ 381:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 382:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         uint8_t temp_wd;
+ 383:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         __asm__ __volatile__ (
+ 384:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in __tmp_reg__,__SREG__" "\n\t"
+ 385:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cli" "\n\t"
+ 386:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"wdr" "\n\t"
+ 387:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %[CCPADDRESS],%[SIGNATURE]" "\n\t"
+ 388:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in %[TEMP_WD],%[WDTREG]" "\n\t"
+ 389:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cbr %[TEMP_WD],%[WDVALUE]" "\n\t"
+ 390:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %[WDTREG],%[TEMP_WD]" "\n\t"
+ 391:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out __SREG__,__tmp_reg__" "\n\t"
+ 392:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: /*no output */
+ 393:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: [CCPADDRESS] "I" (_SFR_IO_ADDR(CCP)),
+ 394:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[SIGNATURE] "r" ((uint8_t)0xD8),
+ 395:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDTREG] "I" (_SFR_IO_ADDR(_WD_CONTROL_REG)),
+ 396:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[TEMP_WD] "d" (temp_wd),
+ 397:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDVALUE] "n" (1 << WDE)
+ 398:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "r0"
+ 399:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				);
+ 400:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 401:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** }
+ 402:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 403:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** #else
+ 404:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 405:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** static __inline__
+ 406:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __attribute__ ((__always_inline__))
+ 407:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** void wdt_enable (const uint8_t value)
+ 408:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** {
+ 409:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	if (_SFR_IO_REG_P (_WD_CONTROL_REG))
+ 410:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 411:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 412:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in __tmp_reg__,__SREG__" "\n\t"
+ 413:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cli" "\n\t"
+ 414:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"wdr" "\n\t"
+ 415:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %0, %1" "\n\t"
+ 416:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out __SREG__,__tmp_reg__" "\n\t"
+ 417:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %0, %2" "\n \t"
+ 418:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: /* no outputs */
+ 419:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "I" (_SFR_IO_ADDR(_WD_CONTROL_REG)),
+ 420:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"r" ((uint8_t)(_BV(_WD_CHANGE_BIT) | _BV(WDE))),
+ 421:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"r" ((uint8_t) ((value & 0x08 ? _WD_PS3_MASK : 0x00) |
+ 422:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 						_BV(WDE) | (value & 0x07)) )
+ 423:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "r0"
+ 424:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		);
+ 425:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 426:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else
+ 427:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 428:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 429:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in __tmp_reg__,__SREG__" "\n\t"
+ 430:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cli" "\n\t"
+ 431:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"wdr" "\n\t"
+ 432:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"sts %0, %1" "\n\t"
+ 433:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out __SREG__,__tmp_reg__" "\n\t"
+ 434:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"sts %0, %2" "\n \t"
+ 435:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: /* no outputs */
+ 436:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "n" (_SFR_MEM_ADDR(_WD_CONTROL_REG)),
+ 437:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"r" ((uint8_t)(_BV(_WD_CHANGE_BIT) | _BV(WDE))),
+ 438:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"r" ((uint8_t) ((value & 0x08 ? _WD_PS3_MASK : 0x00) |
+ 439:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 						_BV(WDE) | (value & 0x07)) )
+ 440:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "r0"
+ 441:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		);
+ 442:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 443:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** }
+ 444:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 
+ 445:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** static __inline__
+ 446:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** __attribute__ ((__always_inline__))
+ 447:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** void wdt_disable (void)
+ 207               		.loc 2 447 6 view .LVU49
+ 208               	.LBE13:
+ 209               	.LBE12:
+ 210               	.LBE11:
+ 448:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** {
+ 449:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	if (_SFR_IO_REG_P (_WD_CONTROL_REG))
+ 211               		.loc 2 449 2 view .LVU50
+ 212               	.LBB17:
+ 213               	.LBB16:
+ 214               	.LBB15:
+ 215               	.LBB14:
+ 450:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 451:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         uint8_t register temp_reg;
+ 452:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 453:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in __tmp_reg__,__SREG__"    "\n\t"
+ 454:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"cli"                        "\n\t"
+ 455:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"wdr"                        "\n\t"
+ 456:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"in  %[TEMPREG],%[WDTREG]"   "\n\t"
+ 457:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"ori %[TEMPREG],%[WDCE_WDE]" "\n\t"
+ 458:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %[WDTREG],%[TEMPREG]"   "\n\t"
+ 459:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out %[WDTREG],__zero_reg__" "\n\t"
+ 460:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				"out __SREG__,__tmp_reg__"   "\n\t"
+ 461:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: [TEMPREG] "=d" (temp_reg)
+ 462:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: [WDTREG]  "I"  (_SFR_IO_ADDR(_WD_CONTROL_REG)),
+ 463:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				[WDCE_WDE]  "n"  ((uint8_t)(_BV(_WD_CHANGE_BIT) | _BV(WDE)))
+ 464:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 				: "r0"
+ 465:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		);
+ 466:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	}
+ 467:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	else
+ 468:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 	{
+ 469:c:\qmk_msys\mingw64\avr\include\avr\wdt.h ****         uint8_t register temp_reg;
+ 216               		.loc 2 469 9 view .LVU51
+ 470:c:\qmk_msys\mingw64\avr\include\avr\wdt.h **** 		__asm__ __volatile__ (
+ 217               		.loc 2 470 3 view .LVU52
+ 218               	/* #APP */
+ 219               	 ;  470 "c:\qmk_msys\mingw64\avr\include\avr\wdt.h" 1
+ 220 004a 0FB6      		in __tmp_reg__,__SREG__
+ 221 004c F894      		cli
+ 222 004e A895      		wdr
+ 223 0050 8091 6000 		lds r24,96
+ 224 0054 8861      		ori r24,24
+ 225 0056 8093 6000 		sts 96,r24
+ 226 005a 1092 6000 		sts 96,__zero_reg__
+ 227 005e 0FBE      		out __SREG__,__tmp_reg__
+ 228               		
+ 229               	 ;  0 "" 2
+ 230               	.LVL6:
+ 231               	/* #NOAPP */
+ 232               	.L5:
+ 233               	/* epilogue start */
+ 234               		.loc 2 470 3 is_stmt 0 view .LVU53
+ 235               	.LBE14:
+ 236               	.LBE15:
+ 237               	.LBE16:
+ 238               	.LBE17:
+ 178:tmk_core/common/avr/suspend.c **** 
+ 239               		.loc 1 178 1 view .LVU54
+ 240 0060 0895      		ret
+ 241               		.cfi_endproc
+ 242               	.LFE126:
+ 244               		.section	.text.matrix_power_down,"ax",@progbits
+ 245               		.weak	matrix_power_down
+ 247               	matrix_power_down:
+ 248               	.LFB135:
+ 249               		.cfi_startproc
+ 250               	/* prologue: function */
+ 251               	/* frame size = 0 */
+ 252               	/* stack size = 0 */
+ 253               	.L__stack_usage = 0
+ 254               	/* epilogue start */
+ 255 0000 0895      		ret
+ 256               		.cfi_endproc
+ 257               	.LFE135:
+ 259               		.section	.text.suspend_wakeup_condition,"ax",@progbits
+ 260               	.global	suspend_wakeup_condition
+ 262               	suspend_wakeup_condition:
+ 263               	.LFB129:
+ 181:tmk_core/common/avr/suspend.c **** __attribute__((weak)) void matrix_power_down(void) {}
+ 182:tmk_core/common/avr/suspend.c **** bool                       suspend_wakeup_condition(void) {
+ 264               		.loc 1 182 59 is_stmt 1 view -0
+ 265               		.cfi_startproc
+ 266               		.loc 1 182 59 is_stmt 0 view .LVU56
+ 267 0000 CF93      		push r28
+ 268               	.LCFI0:
+ 269               		.cfi_def_cfa_offset 3
+ 270               		.cfi_offset 28, -2
+ 271               	/* prologue: function */
+ 272               	/* frame size = 0 */
+ 273               	/* stack size = 1 */
+ 274               	.L__stack_usage = 1
+ 183:tmk_core/common/avr/suspend.c ****     matrix_power_up();
+ 275               		.loc 1 183 5 is_stmt 1 view .LVU57
+ 276 0002 0E94 0000 		call matrix_power_up
+ 277               	.LVL7:
+ 184:tmk_core/common/avr/suspend.c ****     matrix_scan();
+ 278               		.loc 1 184 5 view .LVU58
+ 279 0006 0E94 0000 		call matrix_scan
+ 280               	.LVL8:
+ 185:tmk_core/common/avr/suspend.c ****     matrix_power_down();
+ 281               		.loc 1 185 5 view .LVU59
+ 282 000a 0E94 0000 		call matrix_power_down
+ 283               	.LVL9:
+ 186:tmk_core/common/avr/suspend.c ****     for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
+ 284               		.loc 1 186 5 view .LVU60
+ 285               	.LBB18:
+ 286               		.loc 1 186 10 view .LVU61
+ 287               		.loc 1 186 25 view .LVU62
+ 288               		.loc 1 186 18 is_stmt 0 view .LVU63
+ 289 000e C0E0      		ldi r28,0
+ 290               	.LVL10:
+ 291               	.L13:
+ 187:tmk_core/common/avr/suspend.c ****         if (matrix_get_row(r)) return true;
+ 292               		.loc 1 187 9 is_stmt 1 view .LVU64
+ 293               		.loc 1 187 13 is_stmt 0 view .LVU65
+ 294 0010 8C2F      		mov r24,r28
+ 295 0012 0E94 0000 		call matrix_get_row
+ 296               	.LVL11:
+ 297               		.loc 1 187 12 view .LVU66
+ 298 0016 892B      		or r24,r25
+ 299 0018 01F4      		brne .L14
+ 186:tmk_core/common/avr/suspend.c ****     for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
+ 300               		.loc 1 186 42 is_stmt 1 discriminator 2 view .LVU67
+ 186:tmk_core/common/avr/suspend.c ****     for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
+ 301               		.loc 1 186 43 is_stmt 0 discriminator 2 view .LVU68
+ 302 001a CF5F      		subi r28,lo8(-(1))
+ 303               	.LVL12:
+ 186:tmk_core/common/avr/suspend.c ****     for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
+ 304               		.loc 1 186 25 is_stmt 1 discriminator 2 view .LVU69
+ 186:tmk_core/common/avr/suspend.c ****     for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
+ 305               		.loc 1 186 5 is_stmt 0 discriminator 2 view .LVU70
+ 306 001c C430      		cpi r28,lo8(4)
+ 307 001e 01F4      		brne .L13
+ 308               	.LBE18:
+ 188:tmk_core/common/avr/suspend.c ****     }
+ 189:tmk_core/common/avr/suspend.c ****     return false;
+ 309               		.loc 1 189 12 view .LVU71
+ 310 0020 80E0      		ldi r24,0
+ 311               	.L11:
+ 312               	/* epilogue start */
+ 190:tmk_core/common/avr/suspend.c **** }
+ 313               		.loc 1 190 1 view .LVU72
+ 314 0022 CF91      		pop r28
+ 315               	.LVL13:
+ 316               		.loc 1 190 1 view .LVU73
+ 317 0024 0895      		ret
+ 318               	.LVL14:
+ 319               	.L14:
+ 320               	.LBB19:
+ 187:tmk_core/common/avr/suspend.c ****         if (matrix_get_row(r)) return true;
+ 321               		.loc 1 187 39 view .LVU74
+ 322 0026 81E0      		ldi r24,lo8(1)
+ 323 0028 00C0      		rjmp .L11
+ 324               	.LBE19:
+ 325               		.cfi_endproc
+ 326               	.LFE129:
+ 328               		.section	.text.suspend_wakeup_init_user,"ax",@progbits
+ 329               		.weak	suspend_wakeup_init_user
+ 331               	suspend_wakeup_init_user:
+ 332               	.LFB137:
+ 333               		.cfi_startproc
+ 334               	/* prologue: function */
+ 335               	/* frame size = 0 */
+ 336               	/* stack size = 0 */
+ 337               	.L__stack_usage = 0
+ 338               	/* epilogue start */
+ 339 0000 0895      		ret
+ 340               		.cfi_endproc
+ 341               	.LFE137:
+ 343               		.section	.text.suspend_wakeup_init_kb,"ax",@progbits
+ 344               		.weak	suspend_wakeup_init_kb
+ 346               	suspend_wakeup_init_kb:
+ 347               	.LFB131:
+ 191:tmk_core/common/avr/suspend.c **** 
+ 192:tmk_core/common/avr/suspend.c **** /** \brief run user level code immediately after wakeup
+ 193:tmk_core/common/avr/suspend.c ****  *
+ 194:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+ 195:tmk_core/common/avr/suspend.c ****  */
+ 196:tmk_core/common/avr/suspend.c **** __attribute__((weak)) void suspend_wakeup_init_user(void) {}
+ 197:tmk_core/common/avr/suspend.c **** 
+ 198:tmk_core/common/avr/suspend.c **** /** \brief run keyboard level code immediately after wakeup
+ 199:tmk_core/common/avr/suspend.c ****  *
+ 200:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+ 201:tmk_core/common/avr/suspend.c ****  */
+ 202:tmk_core/common/avr/suspend.c **** __attribute__((weak)) void suspend_wakeup_init_kb(void) { suspend_wakeup_init_user(); }
+ 348               		.loc 1 202 57 is_stmt 1 view -0
+ 349               		.cfi_startproc
+ 350               	/* prologue: function */
+ 351               	/* frame size = 0 */
+ 352               	/* stack size = 0 */
+ 353               	.L__stack_usage = 0
+ 354               		.loc 1 202 59 view .LVU76
+ 355 0000 0C94 0000 		jmp suspend_wakeup_init_user
+ 356               	.LVL15:
+ 357               		.cfi_endproc
+ 358               	.LFE131:
+ 360               		.section	.text.suspend_wakeup_init,"ax",@progbits
+ 361               	.global	suspend_wakeup_init
+ 363               	suspend_wakeup_init:
+ 364               	.LFB132:
+ 203:tmk_core/common/avr/suspend.c **** 
+ 204:tmk_core/common/avr/suspend.c **** /** \brief run immediately after wakeup
+ 205:tmk_core/common/avr/suspend.c ****  *
+ 206:tmk_core/common/avr/suspend.c ****  * FIXME: needs doc
+ 207:tmk_core/common/avr/suspend.c ****  */
+ 208:tmk_core/common/avr/suspend.c **** void suspend_wakeup_init(void) {
+ 365               		.loc 1 208 32 view -0
+ 366               		.cfi_startproc
+ 367               	/* prologue: function */
+ 368               	/* frame size = 0 */
+ 369               	/* stack size = 0 */
+ 370               	.L__stack_usage = 0
+ 209:tmk_core/common/avr/suspend.c ****     // clear keyboard state
+ 210:tmk_core/common/avr/suspend.c ****     clear_keyboard();
+ 371               		.loc 1 210 5 view .LVU78
+ 372 0000 0E94 0000 		call clear_keyboard
+ 373               	.LVL16:
+ 211:tmk_core/common/avr/suspend.c **** 
+ 212:tmk_core/common/avr/suspend.c ****     // Turn on backlight
+ 213:tmk_core/common/avr/suspend.c **** #ifdef BACKLIGHT_ENABLE
+ 214:tmk_core/common/avr/suspend.c ****     backlight_init();
+ 215:tmk_core/common/avr/suspend.c **** #endif
+ 216:tmk_core/common/avr/suspend.c **** 
+ 217:tmk_core/common/avr/suspend.c ****     // Restore LED indicators
+ 218:tmk_core/common/avr/suspend.c ****     led_set(host_keyboard_leds());
+ 374               		.loc 1 218 5 view .LVU79
+ 375 0004 0E94 0000 		call host_keyboard_leds
+ 376               	.LVL17:
+ 377 0008 0E94 0000 		call led_set
+ 378               	.LVL18:
+ 219:tmk_core/common/avr/suspend.c **** 
+ 220:tmk_core/common/avr/suspend.c ****     // Wake up underglow
+ 221:tmk_core/common/avr/suspend.c **** #if defined(RGBLIGHT_SLEEP) && defined(RGBLIGHT_ENABLE)
+ 222:tmk_core/common/avr/suspend.c ****     rgblight_wakeup();
+ 223:tmk_core/common/avr/suspend.c **** #endif
+ 224:tmk_core/common/avr/suspend.c **** 
+ 225:tmk_core/common/avr/suspend.c **** #if defined(LED_MATRIX_ENABLE)
+ 226:tmk_core/common/avr/suspend.c ****     led_matrix_set_suspend_state(false);
+ 227:tmk_core/common/avr/suspend.c **** #endif
+ 228:tmk_core/common/avr/suspend.c **** #if defined(RGB_MATRIX_ENABLE)
+ 229:tmk_core/common/avr/suspend.c ****     rgb_matrix_set_suspend_state(false);
+ 379               		.loc 1 229 5 view .LVU80
+ 380 000c 80E0      		ldi r24,0
+ 381 000e 0E94 0000 		call rgb_matrix_set_suspend_state
+ 382               	.LVL19:
+ 230:tmk_core/common/avr/suspend.c **** #endif
+ 231:tmk_core/common/avr/suspend.c **** 
+ 232:tmk_core/common/avr/suspend.c ****     suspend_wakeup_init_kb();
+ 383               		.loc 1 232 5 view .LVU81
+ 384 0012 0C94 0000 		jmp suspend_wakeup_init_kb
+ 385               	.LVL20:
+ 386               		.cfi_endproc
+ 387               	.LFE132:
+ 389               		.section	.text.__vector_12,"ax",@progbits
+ 390               	.global	__vector_12
+ 392               	__vector_12:
+ 393               	.LFB133:
+ 233:tmk_core/common/avr/suspend.c **** }
+ 234:tmk_core/common/avr/suspend.c **** 
+ 235:tmk_core/common/avr/suspend.c **** #if !defined(NO_SUSPEND_POWER_DOWN) && defined(WDT_vect)
+ 236:tmk_core/common/avr/suspend.c **** /* watchdog timeout */
+ 237:tmk_core/common/avr/suspend.c **** ISR(WDT_vect) {
+ 394               		.loc 1 237 15 view -0
+ 395               		.cfi_startproc
+ 396 0000 1F92 1FB6 		__gcc_isr 1
+ 396      1F92 1124 
+ 396      8F93 
+ 397 000a 9F93      		push r25
+ 398               	.LCFI1:
+ 399               		.cfi_def_cfa_offset 3
+ 400               		.cfi_offset 25, -2
+ 401 000c AF93      		push r26
+ 402               	.LCFI2:
+ 403               		.cfi_def_cfa_offset 4
+ 404               		.cfi_offset 26, -3
+ 405 000e BF93      		push r27
+ 406               	.LCFI3:
+ 407               		.cfi_def_cfa_offset 5
+ 408               		.cfi_offset 27, -4
+ 409               	/* prologue: Signal */
+ 410               	/* frame size = 0 */
+ 411               	/* stack size = 3...7 */
+ 412               	.L__stack_usage = 3 + __gcc_isr.n_pushed
+ 238:tmk_core/common/avr/suspend.c ****     // compensate timer for sleep
+ 239:tmk_core/common/avr/suspend.c ****     switch (wdt_timeout) {
+ 413               		.loc 1 239 5 view .LVU83
+ 414 0010 8091 0000 		lds r24,wdt_timeout
+ 415 0014 8111      		cpse r24,__zero_reg__
+ 416 0016 00C0      		rjmp .L19
+ 240:tmk_core/common/avr/suspend.c ****         case WDTO_15MS:
+ 241:tmk_core/common/avr/suspend.c ****             timer_count += 15 + 2;  // WDTO_15MS + 2(from observation)
+ 417               		.loc 1 241 13 view .LVU84
+ 418               		.loc 1 241 25 is_stmt 0 view .LVU85
+ 419 0018 8091 0000 		lds r24,timer_count
+ 420 001c 9091 0000 		lds r25,timer_count+1
+ 421 0020 A091 0000 		lds r26,timer_count+2
+ 422 0024 B091 0000 		lds r27,timer_count+3
+ 423 0028 4196      		adiw r24,17
+ 424 002a A11D      		adc r26,__zero_reg__
+ 425 002c B11D      		adc r27,__zero_reg__
+ 426 002e 8093 0000 		sts timer_count,r24
+ 427 0032 9093 0000 		sts timer_count+1,r25
+ 428 0036 A093 0000 		sts timer_count+2,r26
+ 429 003a B093 0000 		sts timer_count+3,r27
+ 242:tmk_core/common/avr/suspend.c ****             break;
+ 430               		.loc 1 242 13 is_stmt 1 view .LVU86
+ 243:tmk_core/common/avr/suspend.c ****         default:;
+ 431               		.loc 1 243 17 view .LVU87
+ 432               	.L19:
+ 433               	/* epilogue start */
+ 244:tmk_core/common/avr/suspend.c ****     }
+ 245:tmk_core/common/avr/suspend.c **** }
+ 434               		.loc 1 245 1 is_stmt 0 view .LVU88
+ 435 003e BF91      		pop r27
+ 436 0040 AF91      		pop r26
+ 437 0042 9F91      		pop r25
+ 438 0044 8F91 1F90 		__gcc_isr 2
+ 438      1FBE 1F90 
+ 439 004c 1895      		reti
+ 440               		__gcc_isr 0,r24
+ 441               		.cfi_endproc
+ 442               	.LFE133:
+ 444               		.section	.bss.wdt_timeout,"aw",@nobits
+ 447               	wdt_timeout:
+ 448 0000 00        		.zero	1
+ 449               		.text
+ 450               	.Letext0:
+ 451               		.file 3 "c:\\qmk_msys\\mingw64\\avr\\include\\stdint.h"
+ 452               		.file 4 "c:\\qmk_msys\\mingw64\\lib\\gcc\\avr\\8.4.0\\include\\stddef.h"
+ 453               		.file 5 "tmk_core/common/action.h"
+ 454               		.file 6 "tmk_core/common/timer.h"
+ 455               		.file 7 "tmk_core/common/report.h"
+ 456               		.file 8 "tmk_core/common/host_driver.h"
+ 457               		.file 9 "tmk_core/common/host.h"
+ 458               		.file 10 "lib/lufa/LUFA/Drivers/USB/Core/AVR8/../StdRequestType.h"
+ 459               		.file 11 "lib/lufa/LUFA/Drivers/USB/Core/AVR8/../DeviceStandardReq.h"
+ 460               		.file 12 "lib/lufa/LUFA/Drivers/USB/Core/USBTask.h"
+ 461               		.file 13 "lib/lufa/LUFA/Drivers/USB/Core/HostStandardReq.h"
+ 462               		.file 14 "c:\\qmk_msys\\mingw64\\avr\\include\\stdio.h"
+ 463               		.file 15 "tmk_core/protocol/lufa/lufa.h"
+ 464               		.file 16 "quantum/color.h"
+ 465               		.file 17 "quantum/rgb_matrix_types.h"
+ 466               		.file 18 "tmk_core/common/debug.h"
+ 467               		.file 19 "quantum/keycode_config.h"
+ 468               		.file 20 "quantum/sequencer/sequencer.h"
+ 469               		.file 21 "lib/lufa/LUFA/Drivers/USB/Core/AVR8/../Device.h"
+ 470               		.file 22 "quantum/keymap.h"
+ 471               		.file 23 "tmk_core/common/action_layer.h"
+ 472               		.file 24 "tmk_core/common/action_util.h"
+ 473               		.file 25 "quantum/send_string.h"
+ 474               		.file 26 "c:\\qmk_msys\\mingw64\\avr\\include\\stdlib.h"
+ 475               		.file 27 "quantum/process_keycode/process_tap_dance.h"
+ 476               		.file 28 "quantum/rgb_matrix.h"
+ 477               		.file 29 "quantum/led.h"
+ 478               		.file 30 "quantum/matrix.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 suspend.c
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:2      *ABS*:000000000000003e __SP_H__
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:3      *ABS*:000000000000003d __SP_L__
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:4      *ABS*:000000000000003f __SREG__
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:5      *ABS*:0000000000000000 __tmp_reg__
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:6      *ABS*:0000000000000001 __zero_reg__
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:13     .text.suspend_idle:0000000000000000 suspend_idle
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:71     .text.matrix_power_up:0000000000000000 matrix_power_up
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:71     .text.matrix_power_up:0000000000000000 matrix_power_up.localalias.0
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:90     .text.suspend_power_down_user:0000000000000000 suspend_power_down_user
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:105    .text.suspend_power_down_kb:0000000000000000 suspend_power_down_kb
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:122    .text.suspend_power_down:0000000000000000 suspend_power_down
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:447    .bss.wdt_timeout:0000000000000000 wdt_timeout
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:247    .text.matrix_power_down:0000000000000000 matrix_power_down
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:262    .text.suspend_wakeup_condition:0000000000000000 suspend_wakeup_condition
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:331    .text.suspend_wakeup_init_user:0000000000000000 suspend_wakeup_init_user
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:346    .text.suspend_wakeup_init_kb:0000000000000000 suspend_wakeup_init_kb
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:363    .text.suspend_wakeup_init:0000000000000000 suspend_wakeup_init
+C:\Users\xue\AppData\Local\Temp\ccGKsuP1.s:392    .text.__vector_12:0000000000000000 __vector_12
+                            *ABS*:0000000000000003 __gcc_isr.n_pushed.001
+
+UNDEFINED SYMBOLS
+USB_DeviceState
+led_set
+rgb_matrix_set_suspend_state
+matrix_scan
+matrix_get_row
+clear_keyboard
+host_keyboard_leds
+timer_count
+__do_clear_bss
