@@ -1,0 +1,346 @@
+   1               		.file	"bm40hsrgb.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.suspend_power_down_kb,"ax",@progbits
+  11               	.global	suspend_power_down_kb
+  13               	suspend_power_down_kb:
+  14               	.LFB24:
+  15               		.file 1 "keyboards/bm40hsrgb/bm40hsrgb.c"
+   1:keyboards/bm40hsrgb/bm40hsrgb.c **** /* Copyright 2020 tominabox1, Richard Goulter <richard.goulter@gmail.com>
+   2:keyboards/bm40hsrgb/bm40hsrgb.c ****  *
+   3:keyboards/bm40hsrgb/bm40hsrgb.c ****  * This program is free software: you can redistribute it and/or modify
+   4:keyboards/bm40hsrgb/bm40hsrgb.c ****  * it under the terms of the GNU General Public License as published by
+   5:keyboards/bm40hsrgb/bm40hsrgb.c ****  * the Free Software Foundation, either version 2 of the License, or
+   6:keyboards/bm40hsrgb/bm40hsrgb.c ****  * (at your option) any later version.
+   7:keyboards/bm40hsrgb/bm40hsrgb.c ****  *
+   8:keyboards/bm40hsrgb/bm40hsrgb.c ****  * This program is distributed in the hope that it will be useful,
+   9:keyboards/bm40hsrgb/bm40hsrgb.c ****  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  10:keyboards/bm40hsrgb/bm40hsrgb.c ****  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  11:keyboards/bm40hsrgb/bm40hsrgb.c ****  * GNU General Public License for more details.
+  12:keyboards/bm40hsrgb/bm40hsrgb.c ****  *
+  13:keyboards/bm40hsrgb/bm40hsrgb.c ****  * You should have received a copy of the GNU General Public License
+  14:keyboards/bm40hsrgb/bm40hsrgb.c ****  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  15:keyboards/bm40hsrgb/bm40hsrgb.c ****  */
+  16:keyboards/bm40hsrgb/bm40hsrgb.c **** #include "bm40hsrgb.h"
+  17:keyboards/bm40hsrgb/bm40hsrgb.c **** 
+  18:keyboards/bm40hsrgb/bm40hsrgb.c **** #if defined(RGB_MATRIX_ENABLE)
+  19:keyboards/bm40hsrgb/bm40hsrgb.c **** led_config_t g_led_config = {
+  20:keyboards/bm40hsrgb/bm40hsrgb.c ****     {
+  21:keyboards/bm40hsrgb/bm40hsrgb.c ****         // Key Matrix to LED Index
+  22:keyboards/bm40hsrgb/bm40hsrgb.c ****         { 0,  1,  2,  3,  4,  5,      6,  7,  8,  9, 10, 11},
+  23:keyboards/bm40hsrgb/bm40hsrgb.c ****         {12, 13, 14, 15, 16, 17,     18, 19, 20, 21, 22, 23},
+  24:keyboards/bm40hsrgb/bm40hsrgb.c ****         {24, 25, 26, 27, 28, 29,     30, 31, 32, 33, 34, 35},
+  25:keyboards/bm40hsrgb/bm40hsrgb.c ****         {36, 37, 38, 39, 40, 41, NO_LED, 42, 43, 44, 45, 46}
+  26:keyboards/bm40hsrgb/bm40hsrgb.c ****     }, {
+  27:keyboards/bm40hsrgb/bm40hsrgb.c ****         // LED Index to Physical Position
+  28:keyboards/bm40hsrgb/bm40hsrgb.c ****         {  0,  0}, { 20,  0}, { 40,  0}, {61,  0}, {81,  0}, {101,  0}, {122,  0}, {142,  0}, {162,
+  29:keyboards/bm40hsrgb/bm40hsrgb.c ****         {  0, 21}, { 20, 21}, { 40, 21}, {61, 21}, {81, 21}, {101, 21}, {122, 21}, {142, 21}, {162,
+  30:keyboards/bm40hsrgb/bm40hsrgb.c ****         {  0, 42}, { 20, 42}, { 40, 42}, {61, 42}, {81, 42}, {101, 42}, {122, 42}, {142, 42}, {162,
+  31:keyboards/bm40hsrgb/bm40hsrgb.c ****         {  0, 64}, { 20, 64}, { 40, 64}, {61, 64}, {81, 64},       {111, 64},      {142, 64}, {162,
+  32:keyboards/bm40hsrgb/bm40hsrgb.c ****         {220, 32}, {176, 32}, {132, 32}, {88, 32}, {44, 32}, {0, 32}
+  33:keyboards/bm40hsrgb/bm40hsrgb.c ****     }, {
+  34:keyboards/bm40hsrgb/bm40hsrgb.c ****         // LED Index to Flag
+  35:keyboards/bm40hsrgb/bm40hsrgb.c ****         1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1,
+  36:keyboards/bm40hsrgb/bm40hsrgb.c ****         1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1,
+  37:keyboards/bm40hsrgb/bm40hsrgb.c ****         1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1,
+  38:keyboards/bm40hsrgb/bm40hsrgb.c ****         1, 1, 1, 1, 1,   1,  1, 1, 1, 1, 1,
+  39:keyboards/bm40hsrgb/bm40hsrgb.c ****         2, 2, 2, 2, 2, 2
+  40:keyboards/bm40hsrgb/bm40hsrgb.c ****     }
+  41:keyboards/bm40hsrgb/bm40hsrgb.c **** };
+  42:keyboards/bm40hsrgb/bm40hsrgb.c **** 
+  43:keyboards/bm40hsrgb/bm40hsrgb.c **** 
+  44:keyboards/bm40hsrgb/bm40hsrgb.c **** void suspend_power_down_kb(void) {
+  16               		.loc 1 44 34 view -0
+  17               		.cfi_startproc
+  18               	/* prologue: function */
+  19               	/* frame size = 0 */
+  20               	/* stack size = 0 */
+  21               	.L__stack_usage = 0
+  45:keyboards/bm40hsrgb/bm40hsrgb.c ****     rgb_matrix_set_suspend_state(true);
+  22               		.loc 1 45 5 view .LVU1
+  23 0000 81E0      		ldi r24,lo8(1)
+  24 0002 0E94 0000 		call rgb_matrix_set_suspend_state
+  25               	.LVL0:
+  46:keyboards/bm40hsrgb/bm40hsrgb.c ****     suspend_power_down_user();
+  26               		.loc 1 46 5 view .LVU2
+  27 0006 0C94 0000 		jmp suspend_power_down_user
+  28               	.LVL1:
+  29               		.cfi_endproc
+  30               	.LFE24:
+  32               		.section	.text.suspend_wakeup_init_kb,"ax",@progbits
+  33               	.global	suspend_wakeup_init_kb
+  35               	suspend_wakeup_init_kb:
+  36               	.LFB25:
+  47:keyboards/bm40hsrgb/bm40hsrgb.c **** }
+  48:keyboards/bm40hsrgb/bm40hsrgb.c **** 
+  49:keyboards/bm40hsrgb/bm40hsrgb.c **** void suspend_wakeup_init_kb(void) {
+  37               		.loc 1 49 35 view -0
+  38               		.cfi_startproc
+  39               	/* prologue: function */
+  40               	/* frame size = 0 */
+  41               	/* stack size = 0 */
+  42               	.L__stack_usage = 0
+  50:keyboards/bm40hsrgb/bm40hsrgb.c ****     rgb_matrix_set_suspend_state(false);
+  43               		.loc 1 50 5 view .LVU4
+  44 0000 80E0      		ldi r24,0
+  45 0002 0E94 0000 		call rgb_matrix_set_suspend_state
+  46               	.LVL2:
+  51:keyboards/bm40hsrgb/bm40hsrgb.c ****     suspend_wakeup_init_user();
+  47               		.loc 1 51 5 view .LVU5
+  48 0006 0C94 0000 		jmp suspend_wakeup_init_user
+  49               	.LVL3:
+  50               		.cfi_endproc
+  51               	.LFE25:
+  53               	.global	g_led_config
+  54               		.section	.data.g_led_config,"aw"
+  57               	g_led_config:
+  58 0000 00        		.byte	0
+  59 0001 01        		.byte	1
+  60 0002 02        		.byte	2
+  61 0003 03        		.byte	3
+  62 0004 04        		.byte	4
+  63 0005 05        		.byte	5
+  64 0006 06        		.byte	6
+  65 0007 07        		.byte	7
+  66 0008 08        		.byte	8
+  67 0009 09        		.byte	9
+  68 000a 0A        		.byte	10
+  69 000b 0B        		.byte	11
+  70 000c 0C        		.byte	12
+  71 000d 0D        		.byte	13
+  72 000e 0E        		.byte	14
+  73 000f 0F        		.byte	15
+  74 0010 10        		.byte	16
+  75 0011 11        		.byte	17
+  76 0012 12        		.byte	18
+  77 0013 13        		.byte	19
+  78 0014 14        		.byte	20
+  79 0015 15        		.byte	21
+  80 0016 16        		.byte	22
+  81 0017 17        		.byte	23
+  82 0018 18        		.byte	24
+  83 0019 19        		.byte	25
+  84 001a 1A        		.byte	26
+  85 001b 1B        		.byte	27
+  86 001c 1C        		.byte	28
+  87 001d 1D        		.byte	29
+  88 001e 1E        		.byte	30
+  89 001f 1F        		.byte	31
+  90 0020 20        		.byte	32
+  91 0021 21        		.byte	33
+  92 0022 22        		.byte	34
+  93 0023 23        		.byte	35
+  94 0024 24        		.byte	36
+  95 0025 25        		.byte	37
+  96 0026 26        		.byte	38
+  97 0027 27        		.byte	39
+  98 0028 28        		.byte	40
+  99 0029 29        		.byte	41
+ 100 002a FF        		.byte	-1
+ 101 002b 2A        		.byte	42
+ 102 002c 2B        		.byte	43
+ 103 002d 2C        		.byte	44
+ 104 002e 2D        		.byte	45
+ 105 002f 2E        		.byte	46
+ 106 0030 00        		.byte	0
+ 107 0031 00        		.byte	0
+ 108 0032 14        		.byte	20
+ 109 0033 00        		.byte	0
+ 110 0034 28        		.byte	40
+ 111 0035 00        		.byte	0
+ 112 0036 3D        		.byte	61
+ 113 0037 00        		.byte	0
+ 114 0038 51        		.byte	81
+ 115 0039 00        		.byte	0
+ 116 003a 65        		.byte	101
+ 117 003b 00        		.byte	0
+ 118 003c 7A        		.byte	122
+ 119 003d 00        		.byte	0
+ 120 003e 8E        		.byte	-114
+ 121 003f 00        		.byte	0
+ 122 0040 A2        		.byte	-94
+ 123 0041 00        		.byte	0
+ 124 0042 B7        		.byte	-73
+ 125 0043 00        		.byte	0
+ 126 0044 CB        		.byte	-53
+ 127 0045 00        		.byte	0
+ 128 0046 E0        		.byte	-32
+ 129 0047 00        		.byte	0
+ 130 0048 00        		.byte	0
+ 131 0049 15        		.byte	21
+ 132 004a 14        		.byte	20
+ 133 004b 15        		.byte	21
+ 134 004c 28        		.byte	40
+ 135 004d 15        		.byte	21
+ 136 004e 3D        		.byte	61
+ 137 004f 15        		.byte	21
+ 138 0050 51        		.byte	81
+ 139 0051 15        		.byte	21
+ 140 0052 65        		.byte	101
+ 141 0053 15        		.byte	21
+ 142 0054 7A        		.byte	122
+ 143 0055 15        		.byte	21
+ 144 0056 8E        		.byte	-114
+ 145 0057 15        		.byte	21
+ 146 0058 A2        		.byte	-94
+ 147 0059 15        		.byte	21
+ 148 005a B7        		.byte	-73
+ 149 005b 15        		.byte	21
+ 150 005c CB        		.byte	-53
+ 151 005d 15        		.byte	21
+ 152 005e E0        		.byte	-32
+ 153 005f 15        		.byte	21
+ 154 0060 00        		.byte	0
+ 155 0061 2A        		.byte	42
+ 156 0062 14        		.byte	20
+ 157 0063 2A        		.byte	42
+ 158 0064 28        		.byte	40
+ 159 0065 2A        		.byte	42
+ 160 0066 3D        		.byte	61
+ 161 0067 2A        		.byte	42
+ 162 0068 51        		.byte	81
+ 163 0069 2A        		.byte	42
+ 164 006a 65        		.byte	101
+ 165 006b 2A        		.byte	42
+ 166 006c 7A        		.byte	122
+ 167 006d 2A        		.byte	42
+ 168 006e 8E        		.byte	-114
+ 169 006f 2A        		.byte	42
+ 170 0070 A2        		.byte	-94
+ 171 0071 2A        		.byte	42
+ 172 0072 B7        		.byte	-73
+ 173 0073 2A        		.byte	42
+ 174 0074 CB        		.byte	-53
+ 175 0075 2A        		.byte	42
+ 176 0076 E0        		.byte	-32
+ 177 0077 2A        		.byte	42
+ 178 0078 00        		.byte	0
+ 179 0079 40        		.byte	64
+ 180 007a 14        		.byte	20
+ 181 007b 40        		.byte	64
+ 182 007c 28        		.byte	40
+ 183 007d 40        		.byte	64
+ 184 007e 3D        		.byte	61
+ 185 007f 40        		.byte	64
+ 186 0080 51        		.byte	81
+ 187 0081 40        		.byte	64
+ 188 0082 6F        		.byte	111
+ 189 0083 40        		.byte	64
+ 190 0084 8E        		.byte	-114
+ 191 0085 40        		.byte	64
+ 192 0086 A2        		.byte	-94
+ 193 0087 40        		.byte	64
+ 194 0088 B7        		.byte	-73
+ 195 0089 40        		.byte	64
+ 196 008a CB        		.byte	-53
+ 197 008b 40        		.byte	64
+ 198 008c E0        		.byte	-32
+ 199 008d 40        		.byte	64
+ 200 008e DC        		.byte	-36
+ 201 008f 20        		.byte	32
+ 202 0090 B0        		.byte	-80
+ 203 0091 20        		.byte	32
+ 204 0092 84        		.byte	-124
+ 205 0093 20        		.byte	32
+ 206 0094 58        		.byte	88
+ 207 0095 20        		.byte	32
+ 208 0096 2C        		.byte	44
+ 209 0097 20        		.byte	32
+ 210 0098 00        		.byte	0
+ 211 0099 20        		.byte	32
+ 212 009a 01        		.byte	1
+ 213 009b 04        		.byte	4
+ 214 009c 04        		.byte	4
+ 215 009d 04        		.byte	4
+ 216 009e 04        		.byte	4
+ 217 009f 04        		.byte	4
+ 218 00a0 04        		.byte	4
+ 219 00a1 04        		.byte	4
+ 220 00a2 04        		.byte	4
+ 221 00a3 04        		.byte	4
+ 222 00a4 04        		.byte	4
+ 223 00a5 01        		.byte	1
+ 224 00a6 01        		.byte	1
+ 225 00a7 04        		.byte	4
+ 226 00a8 04        		.byte	4
+ 227 00a9 04        		.byte	4
+ 228 00aa 04        		.byte	4
+ 229 00ab 04        		.byte	4
+ 230 00ac 04        		.byte	4
+ 231 00ad 04        		.byte	4
+ 232 00ae 04        		.byte	4
+ 233 00af 04        		.byte	4
+ 234 00b0 04        		.byte	4
+ 235 00b1 01        		.byte	1
+ 236 00b2 01        		.byte	1
+ 237 00b3 04        		.byte	4
+ 238 00b4 04        		.byte	4
+ 239 00b5 04        		.byte	4
+ 240 00b6 04        		.byte	4
+ 241 00b7 04        		.byte	4
+ 242 00b8 04        		.byte	4
+ 243 00b9 04        		.byte	4
+ 244 00ba 04        		.byte	4
+ 245 00bb 04        		.byte	4
+ 246 00bc 04        		.byte	4
+ 247 00bd 01        		.byte	1
+ 248 00be 01        		.byte	1
+ 249 00bf 01        		.byte	1
+ 250 00c0 01        		.byte	1
+ 251 00c1 01        		.byte	1
+ 252 00c2 01        		.byte	1
+ 253 00c3 01        		.byte	1
+ 254 00c4 01        		.byte	1
+ 255 00c5 01        		.byte	1
+ 256 00c6 01        		.byte	1
+ 257 00c7 01        		.byte	1
+ 258 00c8 01        		.byte	1
+ 259 00c9 02        		.byte	2
+ 260 00ca 02        		.byte	2
+ 261 00cb 02        		.byte	2
+ 262 00cc 02        		.byte	2
+ 263 00cd 02        		.byte	2
+ 264 00ce 02        		.byte	2
+ 265               		.text
+ 266               	.Letext0:
+ 267               		.file 2 "c:\\qmk_msys\\mingw64\\avr\\include\\stdint.h"
+ 268               		.file 3 "c:\\qmk_msys\\mingw64\\lib\\gcc\\avr\\8.4.0\\include\\stddef.h"
+ 269               		.file 4 "tmk_core/common/report.h"
+ 270               		.file 5 "tmk_core/common/action.h"
+ 271               		.file 6 "tmk_core/common/host.h"
+ 272               		.file 7 "tmk_core/common/debug.h"
+ 273               		.file 8 "quantum/keycode_config.h"
+ 274               		.file 9 "tmk_core/common/timer.h"
+ 275               		.file 10 "quantum/sequencer/sequencer.h"
+ 276               		.file 11 "quantum/keymap.h"
+ 277               		.file 12 "quantum/color.h"
+ 278               		.file 13 "quantum/rgb_matrix_types.h"
+ 279               		.file 14 "quantum/rgb_matrix.h"
+ 280               		.file 15 "tmk_core/common/action_layer.h"
+ 281               		.file 16 "tmk_core/common/action_util.h"
+ 282               		.file 17 "quantum/send_string.h"
+ 283               		.file 18 "c:\\qmk_msys\\mingw64\\avr\\include\\stdlib.h"
+ 284               		.file 19 "quantum/process_keycode/process_tap_dance.h"
+ 285               		.file 20 "tmk_core/common/suspend.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 bm40hsrgb.c
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:2      *ABS*:000000000000003e __SP_H__
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:3      *ABS*:000000000000003d __SP_L__
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:4      *ABS*:000000000000003f __SREG__
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:5      *ABS*:0000000000000000 __tmp_reg__
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:6      *ABS*:0000000000000001 __zero_reg__
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:13     .text.suspend_power_down_kb:0000000000000000 suspend_power_down_kb
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:35     .text.suspend_wakeup_init_kb:0000000000000000 suspend_wakeup_init_kb
+C:\Users\xue\AppData\Local\Temp\ccXJyptp.s:57     .data.g_led_config:0000000000000000 g_led_config
+
+UNDEFINED SYMBOLS
+rgb_matrix_set_suspend_state
+suspend_power_down_user
+suspend_wakeup_init_user
+__do_copy_data

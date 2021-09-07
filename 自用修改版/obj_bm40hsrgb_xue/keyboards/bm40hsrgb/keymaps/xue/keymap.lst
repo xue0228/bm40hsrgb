@@ -1,0 +1,1428 @@
+   1               		.file	"keymap.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.rodata.run_macro.str1.1,"aMS",@progbits,1
+  11               	.LC0:
+  12 0000 433A 5C6D 		.string	"C:\\macro\\"
+  12      6163 726F 
+  12      5C00 
+  13               	.LC1:
+  14 000a 2E76 6273 		.string	".vbs"
+  14      00
+  15               		.section	.text.run_macro,"ax",@progbits
+  16               	.global	run_macro
+  18               	run_macro:
+  19               	.LVL0:
+  20               	.LFB24:
+  21               		.file 1 "keyboards/bm40hsrgb/keymaps/xue/keymap.c"
+   1:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** /* Copyright 2020 tominabox1
+   2:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  *
+   3:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * This program is free software: you can redistribute it and/or modify
+   4:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * it under the terms of the GNU General Public License as published by
+   5:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * the Free Software Foundation, either version 2 of the License, or
+   6:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * (at your option) any later version.
+   7:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  *
+   8:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * This program is distributed in the hope that it will be useful,
+   9:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  10:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  11:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * GNU General Public License for more details.
+  12:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  *
+  13:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * You should have received a copy of the GNU General Public License
+  14:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  15:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  */
+  16:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #include QMK_KEYBOARD_H
+  17:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  18:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** enum layers {
+  19:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   _QWERTY = 0,
+  20:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   _LOWER,
+  21:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   _RAISE,
+  22:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   _ADJUST
+  23:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+  24:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  25:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** enum custom_keycodes {
+  26:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   M1 = SAFE_RANGE, M2, M3, M4,
+  27:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   M5, M6, M7, M8,
+  28:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   M9, M10, M11, M12, CG4,
+  29:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   MO_AT
+  30:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+  31:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  32:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define LOWER MO(_LOWER)
+  33:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define RAISE MO(_RAISE)
+  34:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define ADJUST MO(_ADJUST)
+  35:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define DSK_LT LCTL(LGUI(KC_LEFT))
+  36:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define DSK_RT LCTL(LGUI(KC_RIGHT))
+  37:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define DSK_TO LGUI(KC_D)
+  38:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define WIN_LCK LGUI(KC_L)
+  39:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define WEB_CLS LCTL(KC_W)
+  40:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define WEB_REC LCTL(LSFT(KC_T))
+  41:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define CG1 TO(_QWERTY)
+  42:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define CG2 TO(_LOWER)
+  43:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define CG3 TO(_RAISE)
+  44:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  45:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** // Tap Dance declarations
+  46:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** enum {
+  47:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   POWER,
+  48:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   SLEEP,
+  49:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   WINLOCK
+  50:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+  51:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  52:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** // Tap Dance definitions
+  53:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** qk_tap_dance_action_t tap_dance_actions[] = {
+  54:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   // Tap once for Escape, twice for Caps Lock
+  55:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   [POWER] = ACTION_TAP_DANCE_DOUBLE(KC_NO, KC_PWR),
+  56:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   [SLEEP] = ACTION_TAP_DANCE_DOUBLE(KC_NO, KC_SLEP),
+  57:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   [WINLOCK] = ACTION_TAP_DANCE_DOUBLE(KC_NO, WIN_LCK),
+  58:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+  59:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  60:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** // 部分时间常量
+  61:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define BLINK_TIME 150
+  62:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define WAIT_TIME 150
+  63:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** #define ALT_TAB_TIME 500
+  64:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  65:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** // MO_ALT_TAB键相关变量
+  66:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** bool is_mo_alt_tab_active = false;
+  67:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** uint16_t mo_alt_tab_timer = 0;
+  68:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  69:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** // ALT_TAB键相关变量
+  70:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** bool is_alt_tab_active = false;
+  71:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** uint16_t alt_tab_timer = 0;
+  72:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  73:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** // 记录上一次键层号
+  74:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** uint8_t last_layer = _QWERTY;
+  75:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  76:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** void run_macro(char *index) {
+  22               		.loc 1 76 29 view -0
+  23               		.cfi_startproc
+  24               		.loc 1 76 29 is_stmt 0 view .LVU1
+  25 0000 CF93      		push r28
+  26               	.LCFI0:
+  27               		.cfi_def_cfa_offset 3
+  28               		.cfi_offset 28, -2
+  29 0002 DF93      		push r29
+  30               	.LCFI1:
+  31               		.cfi_def_cfa_offset 4
+  32               		.cfi_offset 29, -3
+  33               	/* prologue: function */
+  34               	/* frame size = 0 */
+  35               	/* stack size = 2 */
+  36               	.L__stack_usage = 2
+  37 0004 EC01      		movw r28,r24
+  77:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   // is_macro_running = true;
+  78:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   // WIN + R 打开运行并等待200 ms
+  79:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   SEND_STRING(SS_LGUI("r") SS_DELAY(200));
+  38               		.loc 1 79 3 is_stmt 1 view .LVU2
+  39               	.LBB2:
+  40               		.loc 1 79 3 view .LVU3
+  41               		.loc 1 79 3 view .LVU4
+  42               	.LBE2:
+  43 0006 80E0      		ldi r24,lo8(__c.4005)
+  44 0008 90E0      		ldi r25,hi8(__c.4005)
+  45               	.LVL1:
+  46               		.loc 1 79 3 is_stmt 0 view .LVU5
+  47 000a 0E94 0000 		call send_string_P
+  48               	.LVL2:
+  80:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   // 按下Shift切换为英文输入
+  81:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   tap_code(KC_LSHIFT);
+  49               		.loc 1 81 3 is_stmt 1 view .LVU6
+  50 000e 81EE      		ldi r24,lo8(-31)
+  51 0010 0E94 0000 		call tap_code
+  52               	.LVL3:
+  82:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   // 输入脚本文件名
+  83:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   send_string("C:\\macro\\");
+  53               		.loc 1 83 3 view .LVU7
+  54 0014 80E0      		ldi r24,lo8(.LC0)
+  55 0016 90E0      		ldi r25,hi8(.LC0)
+  56 0018 0E94 0000 		call send_string
+  57               	.LVL4:
+  84:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   send_string(index);
+  58               		.loc 1 84 3 view .LVU8
+  59 001c CE01      		movw r24,r28
+  60 001e 0E94 0000 		call send_string
+  61               	.LVL5:
+  85:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   send_string(".vbs");
+  62               		.loc 1 85 3 view .LVU9
+  63 0022 80E0      		ldi r24,lo8(.LC1)
+  64 0024 90E0      		ldi r25,hi8(.LC1)
+  65 0026 0E94 0000 		call send_string
+  66               	.LVL6:
+  86:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   // 按下回车，确认运行
+  87:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   tap_code(KC_ENTER);
+  67               		.loc 1 87 3 view .LVU10
+  68 002a 88E2      		ldi r24,lo8(40)
+  69               	/* epilogue start */
+  88:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+  70               		.loc 1 88 1 is_stmt 0 view .LVU11
+  71 002c DF91      		pop r29
+  72 002e CF91      		pop r28
+  73               	.LVL7:
+  87:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+  74               		.loc 1 87 3 view .LVU12
+  75 0030 0C94 0000 		jmp tap_code
+  76               	.LVL8:
+  77               		.cfi_endproc
+  78               	.LFE24:
+  80               		.section	.text.get_current_layer,"ax",@progbits
+  81               	.global	get_current_layer
+  83               	get_current_layer:
+  84               	.LFB25:
+  89:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  90:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  91:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+  92:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+  93:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** /* Qwerty
+  94:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * ,-----------------------------------------------------------------------------------.
+  95:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+  96:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+  97:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | MoT  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |Enter |
+  98:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+  99:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |  Up  | Del  |
+ 100:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 101:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | Ctrl | Gui  | Alt  |Lower |Raise |    Space    |Raise |Lower | Left | Down |Right |
+ 102:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * `-----------------------------------------------------------------------------------'
+ 103:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  */
+ 104:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** [_QWERTY] = LAYOUT_planck_mit(
+ 105:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  
+ 106:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   MO_AT,   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN
+ 107:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_UP, 
+ 108:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_LCTL, KC_LGUI, KC_LALT, LOWER,   RAISE,   KC_SPACE,           RAISE,   LOWER,   KC_LEFT, KC_DO
+ 109:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** ),
+ 110:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 111:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** /* Lower
+ 112:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * ,-----------------------------------------------------------------------------------.
+ 113:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |   [  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  |   {  |
+ 114:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 115:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |   ]  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |   }  |
+ 116:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 117:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |   `  |   /  |   \  |   '  |   -  |   =  |   +  |   _  |   "  |   |  |   ?  |   ~  |
+ 118:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 119:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | Ctrl | Gui  | Alt  |  No  |Shift |    SPACE    |Shift |  No  | Alt  | CAPS | Ctrl |
+ 120:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * `-----------------------------------------------------------------------------------'
+ 121:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  */
+ 122:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** [_LOWER] = LAYOUT_planck_mit(
+ 123:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_LBRC, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,  KC_ASTR,  KC_LPRN, KC_RP
+ 124:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_RBRC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,     KC_8,     KC_9,    KC_0,
+ 125:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_GRV,  KC_SLSH, KC_NUBS, KC_QUOT, KC_MINS, KC_EQL,  KC_PLUS, KC_UNDS,  KC_DQUO,  KC_PIPE, KC_QU
+ 126:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_LCTL, KC_LGUI, KC_LALT, LOWER,   KC_LSFT, KC_SPACE,         KC_RSFT,  LOWER,    KC_RALT, KC_CA
+ 127:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** ),
+ 128:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 129:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** /* Raise
+ 130:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * ,-----------------------------------------------------------------------------------.
+ 131:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | Esc  |  F9  |  F10 |  F11 |  F12 | Home | End  |   7  |   8  |   9  |   +  | Bksp |
+ 132:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 133:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |PrtSc |  F5  |  F6  |  F7  |  F8  | Ins  | PgUp |   4  |   5  |   6  |   -  |Enter |
+ 134:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 135:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |Pause |  F1  |  F2  |  F3  |  F4  |SclLk | PgDn |   1  |   2  |   3  |   *  | Del  |
+ 136:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 137:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | Ctrl | Gui  | Alt  |Shift |  No  |    NumLk    |  No  |   0  |   .  |   /  | Tab  |
+ 138:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * `-----------------------------------------------------------------------------------'
+ 139:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  */
+ 140:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** [_RAISE] = LAYOUT_planck_mit(
+ 141:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_ESC,  KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_HOME, KC_END,  KC_P7,   KC_P8,   KC_P9,   KC_PPLS
+ 142:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_PSCR, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_INS,  KC_PGUP, KC_P4,   KC_P5,   KC_P6,   KC_PMNS
+ 143:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_PAUS, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_SLCK, KC_PGDN, KC_P1,   KC_P2,   KC_P3,   KC_PAST
+ 144:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   KC_LCTL, KC_LGUI, KC_LALT, KC_LSFT, RAISE,   KC_NLCK,          RAISE,   KC_P0,   KC_PDOT, KC_PSLS
+ 145:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** ),
+ 146:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 147:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** /* Adjust
+ 148:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * ,-----------------------------------------------------------------------------------.
+ 149:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |Reset |Mac01 |Mac02 |Mac03 |Mac04 |WebCls|  Pri | Next | Play | Lock |Sleep |Power |
+ 150:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 151:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * | No   |Mac05 |Mac06 |Mac07 |Mac08 |WebRec| Bri- | Bri+ |SclUp |SclLt |MdClk |SclRt |
+ 152:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 153:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |Mac09 |Mac10 |Mac11 |Mac12 |Mac13 | RGB  | Vol- | Vol+ |SclDn |LtClk |MosUp |RtClk |
+ 154:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |------+------+------+------+------+------+------+------+------+------+------+------|
+ 155:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * |Mac14 |Mac15 |Mac16 |DskLt |DskDn |   Desktop   | Mute |LtClk |MosLt |MosDn |MosRt |
+ 156:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  * `-----------------------------------------------------------------------------------'
+ 157:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****  */
+ 158:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** [_ADJUST] = LAYOUT_planck_mit(
+ 159:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   RESET  , CG1,     CG2,     CG3,     CG4,     WEB_CLS, KC_MPRV, KC_MNXT, KC_MPLY, TD(WINLOCK), TD(
+ 160:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   MO_AT,   M1,      M2,      M3,      M4,      WEB_REC, KC_BRID, KC_BRIU, KC_WH_U, KC_WH_L, KC_BTN3
+ 161:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   M9,      M5,      M6,      M7,      M8,      RGB_TOG, KC_VOLD, KC_VOLU, KC_WH_D, KC_BTN1, KC_MS_U
+ 162:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   M10,     M11,     M12,     DSK_LT,  DSK_RT,  DSK_TO,           KC_MUTE, KC_BTN1, KC_MS_L, KC_MS_D
+ 163:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** )
+ 164:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 165:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+ 166:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 167:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 168:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 169:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** // 获取当前键盘层号
+ 170:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** int get_current_layer(void) {
+  85               		.loc 1 170 29 is_stmt 1 view -0
+  86               		.cfi_startproc
+  87               	/* prologue: function */
+  88               	/* frame size = 0 */
+  89               	/* stack size = 0 */
+  90               	.L__stack_usage = 0
+ 171:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (IS_LAYER_ON(1)) {
+  91               		.loc 1 171 3 view .LVU14
+  92               		.loc 1 171 7 is_stmt 0 view .LVU15
+  93 0000 81E0      		ldi r24,lo8(1)
+  94 0002 0E94 0000 		call layer_state_is
+  95               	.LVL9:
+  96               		.loc 1 171 6 view .LVU16
+  97 0006 8111      		cpse r24,__zero_reg__
+  98 0008 00C0      		rjmp .L4
+ 172:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     return 1;
+ 173:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 174:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   else if (IS_LAYER_ON(2)) {
+  99               		.loc 1 174 8 is_stmt 1 view .LVU17
+ 100               		.loc 1 174 12 is_stmt 0 view .LVU18
+ 101 000a 82E0      		ldi r24,lo8(2)
+ 102 000c 0E94 0000 		call layer_state_is
+ 103               	.LVL10:
+ 104               		.loc 1 174 11 view .LVU19
+ 105 0010 8111      		cpse r24,__zero_reg__
+ 106 0012 00C0      		rjmp .L5
+ 175:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     return 2;
+ 176:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 177:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   else if (IS_LAYER_ON(3)) {
+ 107               		.loc 1 177 8 is_stmt 1 view .LVU20
+ 108               		.loc 1 177 12 is_stmt 0 view .LVU21
+ 109 0014 83E0      		ldi r24,lo8(3)
+ 110 0016 0E94 0000 		call layer_state_is
+ 111               	.LVL11:
+ 112               		.loc 1 177 11 view .LVU22
+ 113 001a 8111      		cpse r24,__zero_reg__
+ 114 001c 00C0      		rjmp .L6
+ 178:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     return 3;
+ 179:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   } else {
+ 180:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     return 0;
+ 115               		.loc 1 180 12 view .LVU23
+ 116 001e 90E0      		ldi r25,0
+ 117 0020 80E0      		ldi r24,0
+ 118 0022 0895      		ret
+ 119               	.L4:
+ 172:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 120               		.loc 1 172 12 view .LVU24
+ 121 0024 81E0      		ldi r24,lo8(1)
+ 122 0026 90E0      		ldi r25,0
+ 123 0028 0895      		ret
+ 124               	.L5:
+ 175:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     return 2;
+ 125               		.loc 1 175 12 view .LVU25
+ 126 002a 82E0      		ldi r24,lo8(2)
+ 127 002c 90E0      		ldi r25,0
+ 128 002e 0895      		ret
+ 129               	.L6:
+ 178:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     return 3;
+ 130               		.loc 1 178 12 view .LVU26
+ 131 0030 83E0      		ldi r24,lo8(3)
+ 132 0032 90E0      		ldi r25,0
+ 133               	/* epilogue start */
+ 181:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 182:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+ 134               		.loc 1 182 1 view .LVU27
+ 135 0034 0895      		ret
+ 136               		.cfi_endproc
+ 137               	.LFE25:
+ 139               		.section	.rodata.process_record_user.str1.1,"aMS",@progbits,1
+ 140               	.LC2:
+ 141 0000 3031 00   		.string	"01"
+ 142               	.LC3:
+ 143 0003 3032 00   		.string	"02"
+ 144               	.LC4:
+ 145 0006 3033 00   		.string	"03"
+ 146               	.LC5:
+ 147 0009 3034 00   		.string	"04"
+ 148               	.LC6:
+ 149 000c 3035 00   		.string	"05"
+ 150               	.LC7:
+ 151 000f 3036 00   		.string	"06"
+ 152               	.LC8:
+ 153 0012 3037 00   		.string	"07"
+ 154               	.LC9:
+ 155 0015 3038 00   		.string	"08"
+ 156               	.LC10:
+ 157 0018 3039 00   		.string	"09"
+ 158               	.LC11:
+ 159 001b 3130 00   		.string	"10"
+ 160               	.LC12:
+ 161 001e 3131 00   		.string	"11"
+ 162               	.LC13:
+ 163 0021 3132 00   		.string	"12"
+ 164               		.section	.text.process_record_user,"ax",@progbits
+ 165               	.global	process_record_user
+ 167               	process_record_user:
+ 168               	.LVL12:
+ 169               	.LFB26:
+ 183:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 184:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 185:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** uint8_t now_layer = _QWERTY;
+ 186:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 187:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 188:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+ 170               		.loc 1 188 65 is_stmt 1 view -0
+ 171               		.cfi_startproc
+ 172               		.loc 1 188 65 is_stmt 0 view .LVU29
+ 173 0000 CF93      		push r28
+ 174               	.LCFI2:
+ 175               		.cfi_def_cfa_offset 3
+ 176               		.cfi_offset 28, -2
+ 177               	/* prologue: function */
+ 178               	/* frame size = 0 */
+ 179               	/* stack size = 1 */
+ 180               	.L__stack_usage = 1
+ 189:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   switch (keycode) {
+ 181               		.loc 1 189 3 is_stmt 1 view .LVU30
+ 182 0002 8F55      		subi r24,95
+ 183 0004 9D45      		sbci r25,93
+ 184               	.LVL13:
+ 190:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 191:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M1:
+ 192:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 193:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 194:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("01");
+ 195:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 196:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 197:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 198:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M2:
+ 199:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 200:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("02");
+ 201:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 202:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 203:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 204:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 205:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M3:
+ 206:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 207:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("03");
+ 208:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 209:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 210:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 211:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 212:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M4:
+ 213:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 214:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("04");
+ 215:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 216:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 217:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 218:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 219:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M5:
+ 220:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 221:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("05");
+ 222:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 223:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 224:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 225:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 226:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M6:
+ 227:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 228:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("06");
+ 229:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 230:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 231:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 232:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 233:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M7:
+ 234:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 235:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("07");
+ 236:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 237:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 238:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 239:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 240:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M8:
+ 241:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 242:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("08");
+ 243:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 244:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 245:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 246:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 247:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M9:
+ 248:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 249:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("09");
+ 250:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 251:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 252:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 253:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 254:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M10:
+ 255:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 256:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("10");
+ 257:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 258:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 259:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 260:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 261:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M11:
+ 262:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 263:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("11");
+ 264:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 265:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 266:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 267:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 268:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case M12:
+ 269:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 270:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("12");
+ 271:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 272:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 273:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 274:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 275:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case MO_AT:
+ 276:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 277:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         if (!is_mo_alt_tab_active) {
+ 278:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           is_mo_alt_tab_active = true;
+ 279:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           mo_alt_tab_timer = timer_read();
+ 280:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         }
+ 281:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 282:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         is_mo_alt_tab_active = false;
+ 283:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         if (timer_elapsed(mo_alt_tab_timer) < WAIT_TIME) {
+ 284:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           if (!is_alt_tab_active) {
+ 285:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             is_alt_tab_active = true;
+ 286:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             register_code(KC_LALT);
+ 287:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           }
+ 288:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           alt_tab_timer = timer_read();
+ 289:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           tap_code(KC_TAB);
+ 290:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         } else {
+ 291:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           if (IS_LAYER_ON(_ADJUST)) {
+ 292:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             layer_move(now_layer);
+ 293:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           }
+ 294:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         }
+ 295:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 296:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 297:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 298:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     case CG4:
+ 299:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       if (record->event.pressed) {
+ 300:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         now_layer = _ADJUST;
+ 301:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 302:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 303:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       break;
+ 304:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 305:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     default:
+ 306:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       return true;
+ 185               		.loc 1 306 14 is_stmt 0 view .LVU31
+ 186 0006 C1E0      		ldi r28,lo8(1)
+ 189:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   switch (keycode) {
+ 187               		.loc 1 189 3 view .LVU32
+ 188 0008 8E30      		cpi r24,14
+ 189 000a 9105      		cpc r25,__zero_reg__
+ 190 000c 00F4      		brsh .L7
+ 191 000e FC01      		movw r30,r24
+ 192 0010 E050      		subi r30,lo8(-(gs(.L10)))
+ 193 0012 F040      		sbci r31,hi8(-(gs(.L10)))
+ 194 0014 DB01      		movw r26,r22
+ 195 0016 1296      		adiw r26,2
+ 196 0018 CC91      		ld r28,X
+ 197 001a 0C94 0000 		jmp __tablejump2__
+ 198               		.section	.jumptables.gcc.process_record_user,"a",@progbits
+ 199               		.p2align	1
+ 200               	.L10:
+ 201 0000 0000      		.word gs(.L23)
+ 202 0002 0000      		.word gs(.L22)
+ 203 0004 0000      		.word gs(.L21)
+ 204 0006 0000      		.word gs(.L20)
+ 205 0008 0000      		.word gs(.L19)
+ 206 000a 0000      		.word gs(.L18)
+ 207 000c 0000      		.word gs(.L17)
+ 208 000e 0000      		.word gs(.L16)
+ 209 0010 0000      		.word gs(.L15)
+ 210 0012 0000      		.word gs(.L14)
+ 211 0014 0000      		.word gs(.L13)
+ 212 0016 0000      		.word gs(.L12)
+ 213 0018 0000      		.word gs(.L11)
+ 214 001a 0000      		.word gs(.L9)
+ 215               		.section	.text.process_record_user
+ 216               	.L23:
+ 192:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 217               		.loc 1 192 7 is_stmt 1 view .LVU33
+ 192:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 218               		.loc 1 192 10 is_stmt 0 view .LVU34
+ 219 001e CC23      		tst r28
+ 220 0020 01F0      		breq .L24
+ 221               	.LVL14:
+ 222               	.L69:
+ 307:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 308:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   return false;
+ 223               		.loc 1 308 10 view .LVU35
+ 224 0022 C0E0      		ldi r28,0
+ 225 0024 00C0      		rjmp .L7
+ 226               	.LVL15:
+ 227               	.L24:
+ 194:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       }
+ 228               		.loc 1 194 9 is_stmt 1 view .LVU36
+ 229 0026 80E0      		ldi r24,lo8(.LC2)
+ 230 0028 90E0      		ldi r25,hi8(.LC2)
+ 231 002a 0E94 0000 		call run_macro
+ 232               	.LVL16:
+ 233               	.L7:
+ 309:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+ 234               		.loc 1 309 1 is_stmt 0 view .LVU37
+ 235 002e 8C2F      		mov r24,r28
+ 236               	/* epilogue start */
+ 237 0030 CF91      		pop r28
+ 238 0032 0895      		ret
+ 239               	.LVL17:
+ 240               	.L22:
+ 199:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("02");
+ 241               		.loc 1 199 7 is_stmt 1 view .LVU38
+ 199:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("02");
+ 242               		.loc 1 199 10 is_stmt 0 view .LVU39
+ 243 0034 CC23      		tst r28
+ 244 0036 01F0      		breq .L69
+ 200:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 245               		.loc 1 200 9 is_stmt 1 view .LVU40
+ 246 0038 80E0      		ldi r24,lo8(.LC3)
+ 247 003a 90E0      		ldi r25,hi8(.LC3)
+ 248               	.L70:
+ 249 003c 0E94 0000 		call run_macro
+ 250               	.LVL18:
+ 200:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 251               		.loc 1 200 9 is_stmt 0 view .LVU41
+ 252 0040 00C0      		rjmp .L69
+ 253               	.LVL19:
+ 254               	.L21:
+ 206:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("03");
+ 255               		.loc 1 206 7 is_stmt 1 view .LVU42
+ 207:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 256               		.loc 1 207 9 is_stmt 0 view .LVU43
+ 257 0042 80E0      		ldi r24,lo8(.LC4)
+ 258 0044 90E0      		ldi r25,hi8(.LC4)
+ 206:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("03");
+ 259               		.loc 1 206 10 view .LVU44
+ 260 0046 CC23      		tst r28
+ 261 0048 01F0      		breq .L69
+ 262 004a 00C0      		rjmp .L70
+ 263               	.L20:
+ 213:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("04");
+ 264               		.loc 1 213 7 is_stmt 1 view .LVU45
+ 214:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 265               		.loc 1 214 9 is_stmt 0 view .LVU46
+ 266 004c 80E0      		ldi r24,lo8(.LC5)
+ 267 004e 90E0      		ldi r25,hi8(.LC5)
+ 213:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("04");
+ 268               		.loc 1 213 10 view .LVU47
+ 269 0050 CC23      		tst r28
+ 270 0052 01F0      		breq .L69
+ 271 0054 00C0      		rjmp .L70
+ 272               	.L19:
+ 220:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("05");
+ 273               		.loc 1 220 7 is_stmt 1 view .LVU48
+ 221:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 274               		.loc 1 221 9 is_stmt 0 view .LVU49
+ 275 0056 80E0      		ldi r24,lo8(.LC6)
+ 276 0058 90E0      		ldi r25,hi8(.LC6)
+ 220:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("05");
+ 277               		.loc 1 220 10 view .LVU50
+ 278 005a CC23      		tst r28
+ 279 005c 01F0      		breq .L69
+ 280 005e 00C0      		rjmp .L70
+ 281               	.L18:
+ 227:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("06");
+ 282               		.loc 1 227 7 is_stmt 1 view .LVU51
+ 228:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 283               		.loc 1 228 9 is_stmt 0 view .LVU52
+ 284 0060 80E0      		ldi r24,lo8(.LC7)
+ 285 0062 90E0      		ldi r25,hi8(.LC7)
+ 227:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("06");
+ 286               		.loc 1 227 10 view .LVU53
+ 287 0064 CC23      		tst r28
+ 288 0066 01F0      		breq .L69
+ 289 0068 00C0      		rjmp .L70
+ 290               	.L17:
+ 234:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("07");
+ 291               		.loc 1 234 7 is_stmt 1 view .LVU54
+ 235:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 292               		.loc 1 235 9 is_stmt 0 view .LVU55
+ 293 006a 80E0      		ldi r24,lo8(.LC8)
+ 294 006c 90E0      		ldi r25,hi8(.LC8)
+ 234:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("07");
+ 295               		.loc 1 234 10 view .LVU56
+ 296 006e CC23      		tst r28
+ 297 0070 01F0      		breq .L69
+ 298 0072 00C0      		rjmp .L70
+ 299               	.L16:
+ 241:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("08");
+ 300               		.loc 1 241 7 is_stmt 1 view .LVU57
+ 242:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 301               		.loc 1 242 9 is_stmt 0 view .LVU58
+ 302 0074 80E0      		ldi r24,lo8(.LC9)
+ 303 0076 90E0      		ldi r25,hi8(.LC9)
+ 241:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("08");
+ 304               		.loc 1 241 10 view .LVU59
+ 305 0078 CC23      		tst r28
+ 306 007a 01F0      		breq .L69
+ 307 007c 00C0      		rjmp .L70
+ 308               	.L15:
+ 248:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("09");
+ 309               		.loc 1 248 7 is_stmt 1 view .LVU60
+ 249:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 310               		.loc 1 249 9 is_stmt 0 view .LVU61
+ 311 007e 80E0      		ldi r24,lo8(.LC10)
+ 312 0080 90E0      		ldi r25,hi8(.LC10)
+ 248:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("09");
+ 313               		.loc 1 248 10 view .LVU62
+ 314 0082 CC23      		tst r28
+ 315 0084 01F0      		breq .L69
+ 316 0086 00C0      		rjmp .L70
+ 317               	.L14:
+ 255:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("10");
+ 318               		.loc 1 255 7 is_stmt 1 view .LVU63
+ 256:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 319               		.loc 1 256 9 is_stmt 0 view .LVU64
+ 320 0088 80E0      		ldi r24,lo8(.LC11)
+ 321 008a 90E0      		ldi r25,hi8(.LC11)
+ 255:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("10");
+ 322               		.loc 1 255 10 view .LVU65
+ 323 008c CC23      		tst r28
+ 324 008e 01F0      		breq .L69
+ 325 0090 00C0      		rjmp .L70
+ 326               	.L13:
+ 262:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("11");
+ 327               		.loc 1 262 7 is_stmt 1 view .LVU66
+ 263:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 328               		.loc 1 263 9 is_stmt 0 view .LVU67
+ 329 0092 80E0      		ldi r24,lo8(.LC12)
+ 330 0094 90E0      		ldi r25,hi8(.LC12)
+ 262:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("11");
+ 331               		.loc 1 262 10 view .LVU68
+ 332 0096 CC23      		tst r28
+ 333 0098 01F0      		breq .L69
+ 334 009a 00C0      		rjmp .L70
+ 335               	.L12:
+ 269:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("12");
+ 336               		.loc 1 269 7 is_stmt 1 view .LVU69
+ 270:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 337               		.loc 1 270 9 is_stmt 0 view .LVU70
+ 338 009c 80E0      		ldi r24,lo8(.LC13)
+ 339 009e 90E0      		ldi r25,hi8(.LC13)
+ 269:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         run_macro("12");
+ 340               		.loc 1 269 10 view .LVU71
+ 341 00a0 CC23      		tst r28
+ 342 00a2 01F4      		brne .+2
+ 343 00a4 00C0      		rjmp .L69
+ 344 00a6 00C0      		rjmp .L70
+ 345               	.L9:
+ 276:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         if (!is_mo_alt_tab_active) {
+ 346               		.loc 1 276 7 is_stmt 1 view .LVU72
+ 276:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         if (!is_mo_alt_tab_active) {
+ 347               		.loc 1 276 10 is_stmt 0 view .LVU73
+ 348 00a8 CC23      		tst r28
+ 349 00aa 01F0      		breq .L26
+ 277:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           is_mo_alt_tab_active = true;
+ 350               		.loc 1 277 9 is_stmt 1 view .LVU74
+ 277:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           is_mo_alt_tab_active = true;
+ 351               		.loc 1 277 13 is_stmt 0 view .LVU75
+ 352 00ac C091 0000 		lds r28,is_mo_alt_tab_active
+ 277:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           is_mo_alt_tab_active = true;
+ 353               		.loc 1 277 12 view .LVU76
+ 354 00b0 C111      		cpse r28,__zero_reg__
+ 355 00b2 00C0      		rjmp .L69
+ 278:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           mo_alt_tab_timer = timer_read();
+ 356               		.loc 1 278 11 is_stmt 1 view .LVU77
+ 278:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           mo_alt_tab_timer = timer_read();
+ 357               		.loc 1 278 32 is_stmt 0 view .LVU78
+ 358 00b4 81E0      		ldi r24,lo8(1)
+ 359 00b6 8093 0000 		sts is_mo_alt_tab_active,r24
+ 279:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         }
+ 360               		.loc 1 279 11 is_stmt 1 view .LVU79
+ 279:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         }
+ 361               		.loc 1 279 30 is_stmt 0 view .LVU80
+ 362 00ba 0E94 0000 		call timer_read
+ 363               	.LVL20:
+ 279:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         }
+ 364               		.loc 1 279 28 view .LVU81
+ 365 00be 9093 0000 		sts mo_alt_tab_timer+1,r25
+ 366 00c2 8093 0000 		sts mo_alt_tab_timer,r24
+ 367 00c6 00C0      		rjmp .L7
+ 368               	.LVL21:
+ 369               	.L26:
+ 282:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         if (timer_elapsed(mo_alt_tab_timer) < WAIT_TIME) {
+ 370               		.loc 1 282 9 is_stmt 1 view .LVU82
+ 282:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         if (timer_elapsed(mo_alt_tab_timer) < WAIT_TIME) {
+ 371               		.loc 1 282 30 is_stmt 0 view .LVU83
+ 372 00c8 1092 0000 		sts is_mo_alt_tab_active,__zero_reg__
+ 283:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           if (!is_alt_tab_active) {
+ 373               		.loc 1 283 9 is_stmt 1 view .LVU84
+ 283:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           if (!is_alt_tab_active) {
+ 374               		.loc 1 283 13 is_stmt 0 view .LVU85
+ 375 00cc 8091 0000 		lds r24,mo_alt_tab_timer
+ 376 00d0 9091 0000 		lds r25,mo_alt_tab_timer+1
+ 377 00d4 0E94 0000 		call timer_elapsed
+ 378               	.LVL22:
+ 283:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           if (!is_alt_tab_active) {
+ 379               		.loc 1 283 12 view .LVU86
+ 380 00d8 8639      		cpi r24,-106
+ 381 00da 9105      		cpc r25,__zero_reg__
+ 382 00dc 00F4      		brsh .L27
+ 284:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             is_alt_tab_active = true;
+ 383               		.loc 1 284 11 is_stmt 1 view .LVU87
+ 284:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             is_alt_tab_active = true;
+ 384               		.loc 1 284 14 is_stmt 0 view .LVU88
+ 385 00de 8091 0000 		lds r24,is_alt_tab_active
+ 386 00e2 8111      		cpse r24,__zero_reg__
+ 387 00e4 00C0      		rjmp .L28
+ 285:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             register_code(KC_LALT);
+ 388               		.loc 1 285 13 is_stmt 1 view .LVU89
+ 285:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             register_code(KC_LALT);
+ 389               		.loc 1 285 31 is_stmt 0 view .LVU90
+ 390 00e6 81E0      		ldi r24,lo8(1)
+ 391 00e8 8093 0000 		sts is_alt_tab_active,r24
+ 286:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           }
+ 392               		.loc 1 286 13 is_stmt 1 view .LVU91
+ 393 00ec 82EE      		ldi r24,lo8(-30)
+ 394 00ee 0E94 0000 		call register_code
+ 395               	.LVL23:
+ 396               	.L28:
+ 288:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           tap_code(KC_TAB);
+ 397               		.loc 1 288 11 view .LVU92
+ 288:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           tap_code(KC_TAB);
+ 398               		.loc 1 288 27 is_stmt 0 view .LVU93
+ 399 00f2 0E94 0000 		call timer_read
+ 400               	.LVL24:
+ 288:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           tap_code(KC_TAB);
+ 401               		.loc 1 288 25 view .LVU94
+ 402 00f6 9093 0000 		sts alt_tab_timer+1,r25
+ 403 00fa 8093 0000 		sts alt_tab_timer,r24
+ 289:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         } else {
+ 404               		.loc 1 289 11 is_stmt 1 view .LVU95
+ 405 00fe 8BE2      		ldi r24,lo8(43)
+ 406 0100 0E94 0000 		call tap_code
+ 407               	.LVL25:
+ 408 0104 00C0      		rjmp .L7
+ 409               	.L27:
+ 291:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             layer_move(now_layer);
+ 410               		.loc 1 291 11 view .LVU96
+ 291:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             layer_move(now_layer);
+ 411               		.loc 1 291 15 is_stmt 0 view .LVU97
+ 412 0106 83E0      		ldi r24,lo8(3)
+ 413 0108 0E94 0000 		call layer_state_is
+ 414               	.LVL26:
+ 291:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****             layer_move(now_layer);
+ 415               		.loc 1 291 14 view .LVU98
+ 416 010c 8823      		tst r24
+ 417 010e 01F4      		brne .+2
+ 418 0110 00C0      		rjmp .L69
+ 292:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****           }
+ 419               		.loc 1 292 13 is_stmt 1 view .LVU99
+ 420 0112 8091 0000 		lds r24,now_layer
+ 421 0116 0E94 0000 		call layer_move
+ 422               	.LVL27:
+ 423 011a 00C0      		rjmp .L7
+ 424               	.LVL28:
+ 425               	.L11:
+ 299:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         now_layer = _ADJUST;
+ 426               		.loc 1 299 7 view .LVU100
+ 299:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****         now_layer = _ADJUST;
+ 427               		.loc 1 299 10 is_stmt 0 view .LVU101
+ 428 011c CC23      		tst r28
+ 429 011e 01F4      		brne .+2
+ 430 0120 00C0      		rjmp .L69
+ 300:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 431               		.loc 1 300 9 is_stmt 1 view .LVU102
+ 300:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       } else {
+ 432               		.loc 1 300 19 is_stmt 0 view .LVU103
+ 433 0122 83E0      		ldi r24,lo8(3)
+ 434 0124 8093 0000 		sts now_layer,r24
+ 435 0128 00C0      		rjmp .L69
+ 436               		.cfi_endproc
+ 437               	.LFE26:
+ 439               		.section	.text.matrix_scan_user,"ax",@progbits
+ 440               	.global	matrix_scan_user
+ 442               	matrix_scan_user:
+ 443               	.LFB27:
+ 310:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 311:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 312:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** void matrix_scan_user(void) {
+ 444               		.loc 1 312 29 is_stmt 1 view -0
+ 445               		.cfi_startproc
+ 446 0000 CF93      		push r28
+ 447               	.LCFI3:
+ 448               		.cfi_def_cfa_offset 3
+ 449               		.cfi_offset 28, -2
+ 450               	/* prologue: function */
+ 451               	/* frame size = 0 */
+ 452               	/* stack size = 1 */
+ 453               	.L__stack_usage = 1
+ 313:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (is_mo_alt_tab_active) {
+ 454               		.loc 1 313 3 view .LVU105
+ 455               		.loc 1 313 6 is_stmt 0 view .LVU106
+ 456 0002 8091 0000 		lds r24,is_mo_alt_tab_active
+ 457 0006 8823      		tst r24
+ 458 0008 01F0      		breq .L73
+ 314:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     if (timer_elapsed(mo_alt_tab_timer) >= WAIT_TIME) {
+ 459               		.loc 1 314 5 is_stmt 1 view .LVU107
+ 460               		.loc 1 314 9 is_stmt 0 view .LVU108
+ 461 000a 8091 0000 		lds r24,mo_alt_tab_timer
+ 462 000e 9091 0000 		lds r25,mo_alt_tab_timer+1
+ 463 0012 0E94 0000 		call timer_elapsed
+ 464               	.LVL29:
+ 465               		.loc 1 314 8 view .LVU109
+ 466 0016 8639      		cpi r24,-106
+ 467 0018 9105      		cpc r25,__zero_reg__
+ 468 001a 00F0      		brlo .L73
+ 315:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       now_layer = get_current_layer();
+ 469               		.loc 1 315 7 is_stmt 1 view .LVU110
+ 470               		.loc 1 315 19 is_stmt 0 view .LVU111
+ 471 001c 0E94 0000 		call get_current_layer
+ 472               	.LVL30:
+ 473               		.loc 1 315 17 view .LVU112
+ 474 0020 8093 0000 		sts now_layer,r24
+ 316:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       layer_move(_ADJUST);
+ 475               		.loc 1 316 7 is_stmt 1 view .LVU113
+ 476 0024 83E0      		ldi r24,lo8(3)
+ 477 0026 0E94 0000 		call layer_move
+ 478               	.LVL31:
+ 317:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       is_mo_alt_tab_active = false;
+ 479               		.loc 1 317 7 view .LVU114
+ 480               		.loc 1 317 28 is_stmt 0 view .LVU115
+ 481 002a 1092 0000 		sts is_mo_alt_tab_active,__zero_reg__
+ 482               	.L73:
+ 318:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     }
+ 319:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 320:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (is_alt_tab_active) {
+ 483               		.loc 1 320 3 is_stmt 1 view .LVU116
+ 484               		.loc 1 320 6 is_stmt 0 view .LVU117
+ 485 002e 8091 0000 		lds r24,is_alt_tab_active
+ 486 0032 8823      		tst r24
+ 487 0034 01F0      		breq .L76
+ 321:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     if (timer_elapsed(alt_tab_timer) > ALT_TAB_TIME) {
+ 488               		.loc 1 321 5 is_stmt 1 view .LVU118
+ 489               		.loc 1 321 9 is_stmt 0 view .LVU119
+ 490 0036 8091 0000 		lds r24,alt_tab_timer
+ 491 003a 9091 0000 		lds r25,alt_tab_timer+1
+ 492 003e 0E94 0000 		call timer_elapsed
+ 493               	.LVL32:
+ 494               		.loc 1 321 8 view .LVU120
+ 495 0042 853F      		cpi r24,-11
+ 496 0044 9140      		sbci r25,1
+ 497 0046 00F0      		brlo .L76
+ 322:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       unregister_code(KC_LALT);
+ 498               		.loc 1 322 7 is_stmt 1 view .LVU121
+ 499 0048 82EE      		ldi r24,lo8(-30)
+ 500 004a 0E94 0000 		call unregister_code
+ 501               	.LVL33:
+ 323:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       is_alt_tab_active = false;
+ 502               		.loc 1 323 7 view .LVU122
+ 503               		.loc 1 323 25 is_stmt 0 view .LVU123
+ 504 004e 1092 0000 		sts is_alt_tab_active,__zero_reg__
+ 505               	.L76:
+ 324:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     }
+ 325:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 326:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   uint8_t current_layer = get_current_layer();
+ 506               		.loc 1 326 3 is_stmt 1 view .LVU124
+ 507               		.loc 1 326 27 is_stmt 0 view .LVU125
+ 508 0052 0E94 0000 		call get_current_layer
+ 509               	.LVL34:
+ 510 0056 C82F      		mov r28,r24
+ 511               	.LVL35:
+ 327:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (last_layer != current_layer) {
+ 512               		.loc 1 327 3 is_stmt 1 view .LVU126
+ 513               		.loc 1 327 6 is_stmt 0 view .LVU127
+ 514 0058 8091 0000 		lds r24,last_layer
+ 515               	.LVL36:
+ 516               		.loc 1 327 6 view .LVU128
+ 517 005c 8C17      		cp r24,r28
+ 518 005e 01F0      		breq .L71
+ 328:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     if (current_layer == _QWERTY) {
+ 519               		.loc 1 328 5 is_stmt 1 view .LVU129
+ 329:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       rgb_matrix_mode(RGB_MATRIX_qwerty);
+ 520               		.loc 1 329 7 is_stmt 0 view .LVU130
+ 521 0060 83E0      		ldi r24,lo8(3)
+ 328:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     if (current_layer == _QWERTY) {
+ 522               		.loc 1 328 8 view .LVU131
+ 523 0062 CC23      		tst r28
+ 524 0064 01F0      		breq .L83
+ 330:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     }
+ 331:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     else if (current_layer == _LOWER) {
+ 525               		.loc 1 331 10 is_stmt 1 view .LVU132
+ 332:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       rgb_matrix_mode(RGB_MATRIX_lower);
+ 526               		.loc 1 332 7 is_stmt 0 view .LVU133
+ 527 0066 84E0      		ldi r24,lo8(4)
+ 331:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       rgb_matrix_mode(RGB_MATRIX_lower);
+ 528               		.loc 1 331 13 view .LVU134
+ 529 0068 C130      		cpi r28,lo8(1)
+ 530 006a 01F0      		breq .L83
+ 333:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     }
+ 334:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     else if (current_layer == _RAISE) {
+ 531               		.loc 1 334 10 is_stmt 1 view .LVU135
+ 335:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       rgb_matrix_mode(RGB_MATRIX_raise);
+ 532               		.loc 1 335 7 is_stmt 0 view .LVU136
+ 533 006c 85E0      		ldi r24,lo8(5)
+ 334:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       rgb_matrix_mode(RGB_MATRIX_raise);
+ 534               		.loc 1 334 13 view .LVU137
+ 535 006e C230      		cpi r28,lo8(2)
+ 536 0070 01F0      		breq .L83
+ 336:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     } else {
+ 337:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****       rgb_matrix_mode(RGB_MATRIX_adjust);
+ 537               		.loc 1 337 7 is_stmt 1 view .LVU138
+ 538 0072 86E0      		ldi r24,lo8(6)
+ 539               	.L83:
+ 540 0074 0E94 0000 		call rgb_matrix_mode
+ 541               	.LVL37:
+ 338:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     }
+ 339:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     last_layer = current_layer;
+ 542               		.loc 1 339 5 view .LVU139
+ 543               		.loc 1 339 16 is_stmt 0 view .LVU140
+ 544 0078 C093 0000 		sts last_layer,r28
+ 545               	.L71:
+ 546               	/* epilogue start */
+ 340:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   }
+ 341:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+ 547               		.loc 1 341 1 view .LVU141
+ 548 007c CF91      		pop r28
+ 549               	.LVL38:
+ 550               		.loc 1 341 1 view .LVU142
+ 551 007e 0895      		ret
+ 552               		.cfi_endproc
+ 553               	.LFE27:
+ 555               		.section	.text.keyboard_post_init_user,"ax",@progbits
+ 556               	.global	keyboard_post_init_user
+ 558               	keyboard_post_init_user:
+ 559               	.LFB28:
+ 342:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 343:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** void keyboard_post_init_user(void) {
+ 560               		.loc 1 343 36 is_stmt 1 view -0
+ 561               		.cfi_startproc
+ 562               	/* prologue: function */
+ 563               	/* frame size = 0 */
+ 564               	/* stack size = 0 */
+ 565               	.L__stack_usage = 0
+ 344:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   rgb_matrix_mode(RGB_MATRIX_qwerty);
+ 566               		.loc 1 344 3 view .LVU144
+ 567 0000 83E0      		ldi r24,lo8(3)
+ 568 0002 0C94 0000 		jmp rgb_matrix_mode
+ 569               	.LVL39:
+ 570               		.cfi_endproc
+ 571               	.LFE28:
+ 573               		.section	.text.rgb_matrix_indicators_kb,"ax",@progbits
+ 574               	.global	rgb_matrix_indicators_kb
+ 576               	rgb_matrix_indicators_kb:
+ 577               	.LFB29:
+ 345:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** };
+ 346:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** 
+ 347:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** void rgb_matrix_indicators_kb(void) {
+ 578               		.loc 1 347 37 view -0
+ 579               		.cfi_startproc
+ 580 0000 CF93      		push r28
+ 581               	.LCFI4:
+ 582               		.cfi_def_cfa_offset 3
+ 583               		.cfi_offset 28, -2
+ 584               	/* prologue: function */
+ 585               	/* frame size = 0 */
+ 586               	/* stack size = 1 */
+ 587               	.L__stack_usage = 1
+ 348:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   led_t led_state = host_keyboard_led_state();
+ 588               		.loc 1 348 3 view .LVU146
+ 589               		.loc 1 348 21 is_stmt 0 view .LVU147
+ 590 0002 0E94 0000 		call host_keyboard_led_state
+ 591               	.LVL40:
+ 592 0006 C82F      		mov r28,r24
+ 593               	.LVL41:
+ 349:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (led_state.caps_lock) {
+ 594               		.loc 1 349 3 is_stmt 1 view .LVU148
+ 350:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     rgb_matrix_set_color(0, 148, 0, 211);
+ 595               		.loc 1 350 5 is_stmt 0 view .LVU149
+ 596 0008 23ED      		ldi r18,lo8(-45)
+ 597 000a 40E0      		ldi r20,0
+ 598 000c 64E9      		ldi r22,lo8(-108)
+ 599               	.LVL42:
+ 349:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (led_state.caps_lock) {
+ 600               		.loc 1 349 6 view .LVU150
+ 601 000e 81FD      		sbrc r24,1
+ 602 0010 00C0      		rjmp .L91
+ 351:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   } else {
+ 352:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     rgb_matrix_set_color(0, 147, 112, 219);
+ 603               		.loc 1 352 5 is_stmt 1 view .LVU151
+ 604 0012 2BED      		ldi r18,lo8(-37)
+ 605 0014 40E7      		ldi r20,lo8(112)
+ 606 0016 63E9      		ldi r22,lo8(-109)
+ 607               	.L91:
+ 608 0018 90E0      		ldi r25,0
+ 609 001a 80E0      		ldi r24,0
+ 610               	.LVL43:
+ 611               		.loc 1 352 5 is_stmt 0 view .LVU152
+ 612 001c 0E94 0000 		call rgb_matrix_set_color
+ 613               	.LVL44:
+ 353:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   };
+ 614               		.loc 1 353 4 is_stmt 1 view .LVU153
+ 354:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (!led_state.num_lock) {
+ 615               		.loc 1 354 3 view .LVU154
+ 355:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     rgb_matrix_set_color(12, 148, 0, 211);
+ 616               		.loc 1 355 5 is_stmt 0 view .LVU155
+ 617 0020 23ED      		ldi r18,lo8(-45)
+ 618 0022 40E0      		ldi r20,0
+ 619 0024 64E9      		ldi r22,lo8(-108)
+ 620               	.LVL45:
+ 354:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (!led_state.num_lock) {
+ 621               		.loc 1 354 6 view .LVU156
+ 622 0026 C0FF      		sbrs r28,0
+ 623 0028 00C0      		rjmp .L92
+ 356:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   } else {
+ 357:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     rgb_matrix_set_color(12, 147, 112, 219);
+ 624               		.loc 1 357 5 is_stmt 1 view .LVU157
+ 625 002a 2BED      		ldi r18,lo8(-37)
+ 626 002c 40E7      		ldi r20,lo8(112)
+ 627 002e 63E9      		ldi r22,lo8(-109)
+ 628               	.L92:
+ 629 0030 8CE0      		ldi r24,lo8(12)
+ 630 0032 90E0      		ldi r25,0
+ 631 0034 0E94 0000 		call rgb_matrix_set_color
+ 632               	.LVL46:
+ 358:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   };
+ 633               		.loc 1 358 4 view .LVU158
+ 359:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (led_state.scroll_lock) {
+ 634               		.loc 1 359 3 view .LVU159
+ 360:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     rgb_matrix_set_color(24, 148, 0, 211);
+ 635               		.loc 1 360 5 is_stmt 0 view .LVU160
+ 636 0038 23ED      		ldi r18,lo8(-45)
+ 637 003a 40E0      		ldi r20,0
+ 638 003c 64E9      		ldi r22,lo8(-108)
+ 359:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   if (led_state.scroll_lock) {
+ 639               		.loc 1 359 6 view .LVU161
+ 640 003e C2FD      		sbrc r28,2
+ 641 0040 00C0      		rjmp .L93
+ 361:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   } else {
+ 362:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     rgb_matrix_set_color(24, 147, 112, 219);
+ 642               		.loc 1 362 5 is_stmt 1 view .LVU162
+ 643 0042 2BED      		ldi r18,lo8(-37)
+ 644 0044 40E7      		ldi r20,lo8(112)
+ 645 0046 63E9      		ldi r22,lo8(-109)
+ 646               	.L93:
+ 647 0048 88E1      		ldi r24,lo8(24)
+ 648 004a 90E0      		ldi r25,0
+ 649               	/* epilogue start */
+ 363:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****   };
+ 364:keyboards/bm40hsrgb/keymaps/xue/keymap.c **** }...
+ 650               		.loc 1 364 1 is_stmt 0 view .LVU163
+ 651 004c CF91      		pop r28
+ 652               	.LVL47:
+ 362:keyboards/bm40hsrgb/keymaps/xue/keymap.c ****     rgb_matrix_set_color(24, 147, 112, 219);
+ 653               		.loc 1 362 5 view .LVU164
+ 654 004e 0C94 0000 		jmp rgb_matrix_set_color
+ 655               	.LVL48:
+ 656               		.cfi_endproc
+ 657               	.LFE29:
+ 659               		.section	.progmem.data.__c.4005,"a"
+ 662               	__c.4005:
+ 663 0000 0102 E372 		.string	"\001\002\343r\001\003\343\001\004200|"
+ 663      0103 E301 
+ 663      0432 3030 
+ 663      7C00 
+ 664               	.global	now_layer
+ 665               		.section	.bss.now_layer,"aw",@nobits
+ 668               	now_layer:
+ 669 0000 00        		.zero	1
+ 670               	.global	keymaps
+ 671               		.section	.progmem.data.keymaps,"a"
+ 674               	keymaps:
+ 675 0000 2B00      		.word	43
+ 676 0002 1400      		.word	20
+ 677 0004 1A00      		.word	26
+ 678 0006 0800      		.word	8
+ 679 0008 1500      		.word	21
+ 680 000a 1700      		.word	23
+ 681 000c 1C00      		.word	28
+ 682 000e 1800      		.word	24
+ 683 0010 0C00      		.word	12
+ 684 0012 1200      		.word	18
+ 685 0014 1300      		.word	19
+ 686 0016 2A00      		.word	42
+ 687 0018 6C5D      		.word	23916
+ 688 001a 0400      		.word	4
+ 689 001c 1600      		.word	22
+ 690 001e 0700      		.word	7
+ 691 0020 0900      		.word	9
+ 692 0022 0A00      		.word	10
+ 693 0024 0B00      		.word	11
+ 694 0026 0D00      		.word	13
+ 695 0028 0E00      		.word	14
+ 696 002a 0F00      		.word	15
+ 697 002c 3300      		.word	51
+ 698 002e 2800      		.word	40
+ 699 0030 E100      		.word	225
+ 700 0032 1D00      		.word	29
+ 701 0034 1B00      		.word	27
+ 702 0036 0600      		.word	6
+ 703 0038 1900      		.word	25
+ 704 003a 0500      		.word	5
+ 705 003c 1100      		.word	17
+ 706 003e 1000      		.word	16
+ 707 0040 3600      		.word	54
+ 708 0042 3700      		.word	55
+ 709 0044 5200      		.word	82
+ 710 0046 4C00      		.word	76
+ 711 0048 E000      		.word	224
+ 712 004a E300      		.word	227
+ 713 004c E200      		.word	226
+ 714 004e 0151      		.word	20737
+ 715 0050 0251      		.word	20738
+ 716 0052 2C00      		.word	44
+ 717 0054 0000      		.word	0
+ 718 0056 0251      		.word	20738
+ 719 0058 0151      		.word	20737
+ 720 005a 5000      		.word	80
+ 721 005c 5100      		.word	81
+ 722 005e 4F00      		.word	79
+ 723 0060 2F00      		.word	47
+ 724 0062 1E02      		.word	542
+ 725 0064 1F02      		.word	543
+ 726 0066 2002      		.word	544
+ 727 0068 2102      		.word	545
+ 728 006a 2202      		.word	546
+ 729 006c 2302      		.word	547
+ 730 006e 2402      		.word	548
+ 731 0070 2502      		.word	549
+ 732 0072 2602      		.word	550
+ 733 0074 2702      		.word	551
+ 734 0076 2F02      		.word	559
+ 735 0078 3000      		.word	48
+ 736 007a 1E00      		.word	30
+ 737 007c 1F00      		.word	31
+ 738 007e 2000      		.word	32
+ 739 0080 2100      		.word	33
+ 740 0082 2200      		.word	34
+ 741 0084 2300      		.word	35
+ 742 0086 2400      		.word	36
+ 743 0088 2500      		.word	37
+ 744 008a 2600      		.word	38
+ 745 008c 2700      		.word	39
+ 746 008e 3002      		.word	560
+ 747 0090 3500      		.word	53
+ 748 0092 3800      		.word	56
+ 749 0094 6400      		.word	100
+ 750 0096 3400      		.word	52
+ 751 0098 2D00      		.word	45
+ 752 009a 2E00      		.word	46
+ 753 009c 2E02      		.word	558
+ 754 009e 2D02      		.word	557
+ 755 00a0 3402      		.word	564
+ 756 00a2 3102      		.word	561
+ 757 00a4 3802      		.word	568
+ 758 00a6 3502      		.word	565
+ 759 00a8 E000      		.word	224
+ 760 00aa E300      		.word	227
+ 761 00ac E200      		.word	226
+ 762 00ae 0151      		.word	20737
+ 763 00b0 E100      		.word	225
+ 764 00b2 2C00      		.word	44
+ 765 00b4 0000      		.word	0
+ 766 00b6 E500      		.word	229
+ 767 00b8 0151      		.word	20737
+ 768 00ba E600      		.word	230
+ 769 00bc 3900      		.word	57
+ 770 00be E400      		.word	228
+ 771 00c0 2900      		.word	41
+ 772 00c2 4200      		.word	66
+ 773 00c4 4300      		.word	67
+ 774 00c6 4400      		.word	68
+ 775 00c8 4500      		.word	69
+ 776 00ca 4A00      		.word	74
+ 777 00cc 4D00      		.word	77
+ 778 00ce 5F00      		.word	95
+ 779 00d0 6000      		.word	96
+ 780 00d2 6100      		.word	97
+ 781 00d4 5700      		.word	87
+ 782 00d6 2A00      		.word	42
+ 783 00d8 4600      		.word	70
+ 784 00da 3E00      		.word	62
+ 785 00dc 3F00      		.word	63
+ 786 00de 4000      		.word	64
+ 787 00e0 4100      		.word	65
+ 788 00e2 4900      		.word	73
+ 789 00e4 4B00      		.word	75
+ 790 00e6 5C00      		.word	92
+ 791 00e8 5D00      		.word	93
+ 792 00ea 5E00      		.word	94
+ 793 00ec 5600      		.word	86
+ 794 00ee 5800      		.word	88
+ 795 00f0 4800      		.word	72
+ 796 00f2 3A00      		.word	58
+ 797 00f4 3B00      		.word	59
+ 798 00f6 3C00      		.word	60
+ 799 00f8 3D00      		.word	61
+ 800 00fa 4700      		.word	71
+ 801 00fc 4E00      		.word	78
+ 802 00fe 5900      		.word	89
+ 803 0100 5A00      		.word	90
+ 804 0102 5B00      		.word	91
+ 805 0104 5500      		.word	85
+ 806 0106 4C00      		.word	76
+ 807 0108 E000      		.word	224
+ 808 010a E300      		.word	227
+ 809 010c E200      		.word	226
+ 810 010e E100      		.word	225
+ 811 0110 0251      		.word	20738
+ 812 0112 5300      		.word	83
+ 813 0114 0000      		.word	0
+ 814 0116 0251      		.word	20738
+ 815 0118 6200      		.word	98
+ 816 011a 6300      		.word	99
+ 817 011c 5400      		.word	84
+ 818 011e 2B00      		.word	43
+ 819 0120 005C      		.word	23552
+ 820 0122 1050      		.word	20496
+ 821 0124 1150      		.word	20497
+ 822 0126 1250      		.word	20498
+ 823 0128 6B5D      		.word	23915
+ 824 012a 1A01      		.word	282
+ 825 012c AC00      		.word	172
+ 826 012e AB00      		.word	171
+ 827 0130 AE00      		.word	174
+ 828 0132 0257      		.word	22274
+ 829 0134 0157      		.word	22273
+ 830 0136 0057      		.word	22272
+ 831 0138 6C5D      		.word	23916
+ 832 013a 5F5D      		.word	23903
+ 833 013c 605D      		.word	23904
+ 834 013e 615D      		.word	23905
+ 835 0140 625D      		.word	23906
+ 836 0142 1703      		.word	791
+ 837 0144 BE00      		.word	190
+ 838 0146 BD00      		.word	189
+ 839 0148 F900      		.word	249
+ 840 014a FB00      		.word	251
+ 841 014c F300      		.word	243
+ 842 014e FC00      		.word	252
+ 843 0150 675D      		.word	23911
+ 844 0152 635D      		.word	23907
+ 845 0154 645D      		.word	23908
+ 846 0156 655D      		.word	23909
+ 847 0158 665D      		.word	23910
+ 848 015a C35C      		.word	23747
+ 849 015c AA00      		.word	170
+ 850 015e A900      		.word	169
+ 851 0160 FA00      		.word	250
+ 852 0162 F100      		.word	241
+ 853 0164 ED00      		.word	237
+ 854 0166 F200      		.word	242
+ 855 0168 685D      		.word	23912
+ 856 016a 695D      		.word	23913
+ 857 016c 6A5D      		.word	23914
+ 858 016e 5009      		.word	2384
+ 859 0170 4F09      		.word	2383
+ 860 0172 0708      		.word	2055
+ 861 0174 0000      		.word	0
+ 862 0176 A800      		.word	168
+ 863 0178 F100      		.word	241
+ 864 017a EF00      		.word	239
+ 865 017c EE00      		.word	238
+ 866 017e F000      		.word	240
+ 867               	.global	last_layer
+ 868               		.section	.bss.last_layer,"aw",@nobits
+ 871               	last_layer:
+ 872 0000 00        		.zero	1
+ 873               	.global	alt_tab_timer
+ 874               		.section	.bss.alt_tab_timer,"aw",@nobits
+ 877               	alt_tab_timer:
+ 878 0000 0000      		.zero	2
+ 879               	.global	is_alt_tab_active
+ 880               		.section	.bss.is_alt_tab_active,"aw",@nobits
+ 883               	is_alt_tab_active:
+ 884 0000 00        		.zero	1
+ 885               	.global	mo_alt_tab_timer
+ 886               		.section	.bss.mo_alt_tab_timer,"aw",@nobits
+ 889               	mo_alt_tab_timer:
+ 890 0000 0000      		.zero	2
+ 891               	.global	is_mo_alt_tab_active
+ 892               		.section	.bss.is_mo_alt_tab_active,"aw",@nobits
+ 895               	is_mo_alt_tab_active:
+ 896 0000 00        		.zero	1
+ 897               	.global	tap_dance_actions
+ 898               		.section	.data.tap_dance_actions,"aw"
+ 901               	tap_dance_actions:
+ 902 0000 0000      		.word	gs(qk_tap_dance_pair_on_each_tap)
+ 903 0002 0000      		.word	gs(qk_tap_dance_pair_finished)
+ 904 0004 0000      		.word	gs(qk_tap_dance_pair_reset)
+ 905 0006 0000 0000 		.zero	14
+ 905      0000 0000 
+ 905      0000 0000 
+ 905      0000 
+ 906 0014 0000      		.word	__compound_literal.0
+ 907 0016 0000      		.word	gs(qk_tap_dance_pair_on_each_tap)
+ 908 0018 0000      		.word	gs(qk_tap_dance_pair_finished)
+ 909 001a 0000      		.word	gs(qk_tap_dance_pair_reset)
+ 910 001c 0000 0000 		.zero	14
+ 910      0000 0000 
+ 910      0000 0000 
+ 910      0000 
+ 911 002a 0000      		.word	__compound_literal.1
+ 912 002c 0000      		.word	gs(qk_tap_dance_pair_on_each_tap)
+ 913 002e 0000      		.word	gs(qk_tap_dance_pair_finished)
+ 914 0030 0000      		.word	gs(qk_tap_dance_pair_reset)
+ 915 0032 0000 0000 		.zero	14
+ 915      0000 0000 
+ 915      0000 0000 
+ 915      0000 
+ 916 0040 0000      		.word	__compound_literal.2
+ 917               		.section	.data.__compound_literal.2,"aw"
+ 920               	__compound_literal.2:
+ 921 0000 0000      		.word	0
+ 922 0002 0F08      		.word	2063
+ 923               		.section	.data.__compound_literal.1,"aw"
+ 926               	__compound_literal.1:
+ 927 0000 0000      		.word	0
+ 928 0002 A600      		.word	166
+ 929               		.section	.data.__compound_literal.0,"aw"
+ 932               	__compound_literal.0:
+ 933 0000 0000      		.word	0
+ 934 0002 A500      		.word	165
+ 935               		.text
+ 936               	.Letext0:
+ 937               		.file 2 "c:\\qmk_msys\\mingw64\\avr\\include\\stdint.h"
+ 938               		.file 3 "c:\\qmk_msys\\mingw64\\lib\\gcc\\avr\\8.4.0\\include\\stddef.h"
+ 939               		.file 4 "tmk_core/common/keyboard.h"
+ 940               		.file 5 "tmk_core/common/keycode.h"
+ 941               		.file 6 "tmk_core/common/action_code.h"
+ 942               		.file 7 "tmk_core/common/action.h"
+ 943               		.file 8 "tmk_core/common/report.h"
+ 944               		.file 9 "quantum/led.h"
+ 945               		.file 10 "tmk_core/common/host.h"
+ 946               		.file 11 "tmk_core/common/debug.h"
+ 947               		.file 12 "quantum/keycode_config.h"
+ 948               		.file 13 "tmk_core/common/timer.h"
+ 949               		.file 14 "quantum/sequencer/sequencer.h"
+ 950               		.file 15 "quantum/quantum_keycodes.h"
+ 951               		.file 16 "quantum/keymap.h"
+ 952               		.file 17 "quantum/color.h"
+ 953               		.file 18 "quantum/rgb_matrix_types.h"
+ 954               		.file 19 "quantum/rgb_matrix.h"
+ 955               		.file 20 "tmk_core/common/action_layer.h"
+ 956               		.file 21 "tmk_core/common/action_util.h"
+ 957               		.file 22 "quantum/send_string.h"
+ 958               		.file 23 "c:\\qmk_msys\\mingw64\\avr\\include\\stdlib.h"
+ 959               		.file 24 "quantum/process_keycode/process_tap_dance.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 keymap.c
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:2      *ABS*:000000000000003e __SP_H__
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:3      *ABS*:000000000000003d __SP_L__
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:4      *ABS*:000000000000003f __SREG__
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:5      *ABS*:0000000000000000 __tmp_reg__
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:6      *ABS*:0000000000000001 __zero_reg__
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:18     .text.run_macro:0000000000000000 run_macro
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:662    .progmem.data.__c.4005:0000000000000000 __c.4005
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:83     .text.get_current_layer:0000000000000000 get_current_layer
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:167    .text.process_record_user:0000000000000000 process_record_user
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:895    .bss.is_mo_alt_tab_active:0000000000000000 is_mo_alt_tab_active
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:889    .bss.mo_alt_tab_timer:0000000000000000 mo_alt_tab_timer
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:883    .bss.is_alt_tab_active:0000000000000000 is_alt_tab_active
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:877    .bss.alt_tab_timer:0000000000000000 alt_tab_timer
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:668    .bss.now_layer:0000000000000000 now_layer
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:442    .text.matrix_scan_user:0000000000000000 matrix_scan_user
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:871    .bss.last_layer:0000000000000000 last_layer
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:558    .text.keyboard_post_init_user:0000000000000000 keyboard_post_init_user
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:576    .text.rgb_matrix_indicators_kb:0000000000000000 rgb_matrix_indicators_kb
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:674    .progmem.data.keymaps:0000000000000000 keymaps
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:901    .data.tap_dance_actions:0000000000000000 tap_dance_actions
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:932    .data.__compound_literal.0:0000000000000000 __compound_literal.0
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:926    .data.__compound_literal.1:0000000000000000 __compound_literal.1
+C:\Users\xue\AppData\Local\Temp\ccVeaja3.s:920    .data.__compound_literal.2:0000000000000000 __compound_literal.2
+
+UNDEFINED SYMBOLS
+send_string_P
+tap_code
+send_string
+layer_state_is
+__tablejump2__
+timer_read
+timer_elapsed
+register_code
+layer_move
+unregister_code
+rgb_matrix_mode
+host_keyboard_led_state
+rgb_matrix_set_color
+qk_tap_dance_pair_on_each_tap
+qk_tap_dance_pair_finished
+qk_tap_dance_pair_reset
+__do_copy_data
+__do_clear_bss
